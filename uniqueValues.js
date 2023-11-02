@@ -1,4 +1,9 @@
 const getUniqueValues = function(row, filterName, valuesSelect) {
+
+  if (!valuesSelect.classList.contains('updated')) {
+    valuesSelect.innerHTML = 'loading'; // Reset the select element
+  }
+
     fetch("https://geoserver.dainst.org/gs/wps?service=WPS&outputFormat=json", {
       "headers": {
         "accept": "application/json",
@@ -67,11 +72,13 @@ const getUniqueValues = function(row, filterName, valuesSelect) {
           valuesSelect.innerHTML = ''; // Reset the select element
   
           data.values.forEach(value => {
-            const option = document.createElement('option');
-            option.value = value;
-            option.textContent = value;
-            valuesSelect.appendChild(option);
-            valuesSelect.classList.add('updated');
+            if (value !== "") {
+              const option = document.createElement('option');
+              option.value = value;
+              option.textContent = value;
+              valuesSelect.appendChild(option);
+              valuesSelect.classList.add('updated');
+            }
           });
         }
   

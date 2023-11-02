@@ -21,17 +21,18 @@ html, body {
 
 .iframe {
   width: 100%;
-  height: 250px;
+  height: 450px;
+  height: 673px;
   overflow: hidden;
 }
 
-.attributesTable {
-  border: 1px solid;
-  border-collapse: collapse;
+
+
+.datatable-top, .datatable-bottom {
+  padding: 0!important;
 }
 
-.attributesTable td{
-  vertical-align: top;
-  border: 1px solid;
-  padding: 4px;
+.datatable-container {
+  width: 100%;
+  overflow: scroll;
 }
