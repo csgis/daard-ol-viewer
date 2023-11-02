@@ -24,6 +24,7 @@ html, body {
   height: 450px;
   height: 673px;
   overflow: hidden;
+  pointer-events:none;
 }
 
 

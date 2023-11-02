@@ -29,7 +29,7 @@ const handleFeatureInfo = function(evt) {
           
             for (const key in properties) {
   
-              if (key == 'bone_relations' || key == 'c_b_t_bc_rel' || key == 'svg_id') {
+              if (key == 'bone_relations' || key == 'c_b_t_bc_rel' || key == 'svgid') {
                 continue
               }
   
