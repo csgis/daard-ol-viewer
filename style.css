@@ -28,7 +28,6 @@ html, body {
 }
 
 
-
 .datatable-top, .datatable-bottom {
   padding: 0!important;
 }
@@ -36,4 +35,64 @@ html, body {
 .datatable-container {
   width: 100%;
   overflow: scroll;
+}
+
+.datatable-table th {
+  white-space: nowrap!important;
+  overflow: hidden;
+  font-size: 0.9rem;
+}
+
+.datatable-table td {
+  white-space: nowrap!important;
+  overflow: hidden;
+  font-size: 0.9rem
+}
+
+.datatable-table th button, .datatable-pagination-list button {
+    padding: 0;
+    padding-right: 2rem;
+}
+
+ul.datatable-pagination-list {
+  margin-top: 0.5rem;
+}
+
+.datatable-pagination .datatable-active a, .datatable-pagination .datatable-active a:focus, .datatable-pagination .datatable-active a:hover, .datatable-pagination .datatable-active button, .datatable-pagination .datatable-active button:focus, .datatable-pagination .datatable-active button:hover {
+  background-color: #fff;
+  cursor: default;
+  color: blue;
+  font-weight: bold;
+}
+
+.btn-circle {
+  border-radius: 50px;
+  box-shadow: 0px 1px 7px 0px rgba(0,0,0,0.33);
+}
+
+.icon-gap {
+  gap: 9px;
+}
+
+.ol-zoom {
+  top: 1em!important;
+  right: .8em!important;
+  left: auto!important;
+  box-shadow: 0px 1px 7px 0px rgba(0,0,0,0.33);
+}
+
+.ol-zoom .ol-zoom-in {
+  border-radius: 8px 8px 0 0;
+  width: 1.9em;
+  height: 1.9em;
+}
+
+.ol-zoom .ol-zoom-out {
+  border-radius: 0 0 8px 8px;
+  width: 1.9em;
+  height: 1.9em;
+}
+
+.backgroundSwitcher-item {
+  box-shadow: 0px 1px 7px 0px rgba(0,0,0,0.33);
 }

@@ -1,10 +1,15 @@
+import { getBaseUrl } from '../../helper.js'
+import { wmsSource } from '../core/mapSetup.js';
+
 const getUniqueValues = function(row, filterName, valuesSelect) {
+
+  const baseurl = getBaseUrl(wmsSource.url_);
 
   if (!valuesSelect.classList.contains('updated')) {
     valuesSelect.innerHTML = 'loading'; // Reset the select element
   }
 
-    fetch("https://geoserver.dainst.org/gs/wps?service=WPS&outputFormat=json", {
+    fetch(`${baseurl}/wps?service=WPS&outputFormat=json`, {
       "headers": {
         "accept": "application/json",
         "accept-language": "de-DE,de;q=0.5",
@@ -45,7 +50,7 @@ const getUniqueValues = function(row, filterName, valuesSelect) {
             <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">maxFeatures</ows:Identifier>
             <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">maxFeatures</ows:Title>
             <wps:Data>
-              <wps:LiteralData>5</wps:LiteralData>
+              <wps:LiteralData>20</wps:LiteralData>
             </wps:Data>
           </wps:Input>
           <wps:Input>

@@ -1,0 +1,49 @@
+{
+  "plugins": [
+    {
+      "name": "myButton",
+      "path": "./components/myButton/myButton.js",
+      "enabled": true
+    },
+    {
+      "name": "legend",
+      "path": "./components/legend/legend.js",
+      "enabled": true
+    },
+    {
+      "name": "filterForm",
+      "path": "./components/filterLayer/filterLayer.js",
+      "enabled": true
+    },
+    {
+      "name": "attributeTable",
+      "path": "./components/attributeTable/attributeTable.js",
+      "enabled": true
+    },
+    {
+      "name": "compareTool",
+      "path": "./components/compareTool/compareTool.js",
+      "enabled": true
+    },
+    {
+      "name": "featureInfo",
+      "path": "./components/featureInfo/featureInfo.js",
+      "enabled": true
+    },
+    {
+      "name": "clickIndicator",
+      "path": "./components/clickIndicator/clickIndicator.js",
+      "enabled": true
+    },
+    {
+      "name": "backgroundSwitcher",
+      "path": "./components/backgroundSwitcher/backgroundSwitcher.js",
+      "enabled": true
+    },
+    {
+      "name": "enableTooltips",
+      "path": "./components/enableTooltips/enableTooltips.js",
+      "enabled": true
+    }
+  ]
+}
