@@ -1,49 +1,92 @@
 {
   "plugins": [
     {
+      "name": "layerPanelContainer",
+      "path": "./components/core/layerPanelContainer/layerPanelContainer.js",
+      "enabled": true,
+      "buttonDomOrder": 1,
+      "createsParentDOM": true
+    },
+    {
       "name": "myButton",
-      "path": "./components/myButton/myButton.js",
-      "enabled": true
+      "path": "./components/debug/myButton/myButton.js",
+      "enabled": false,
+      "buttonDomOrder": 2
+    },
+    {
+      "name": "myButton",
+      "path": "./components/core/zoomToWorld/zoomToWorld.js",
+      "enabled": true,
+      "buttonDomOrder": 5
     },
     {
       "name": "legend",
       "path": "./components/legend/legend.js",
-      "enabled": true
+      "enabled": true,
+      "buttonDomOrder": 2
     },
     {
-      "name": "filterForm",
-      "path": "./components/filterLayer/filterLayer.js",
-      "enabled": true
+      "name": "filterLayer",
+      "path": "./components/core/filterLayer/filterLayer.js",
+      "enabled": true,
+      "buttonDomOrder": false
     },
     {
       "name": "attributeTable",
-      "path": "./components/attributeTable/attributeTable.js",
-      "enabled": true
+      "path": "./components/core/attributeTable/attributeTable.js",
+      "enabled": true,
+      "buttonDomOrder": 3
     },
     {
       "name": "compareTool",
-      "path": "./components/compareTool/compareTool.js",
-      "enabled": true
+      "path": "./components/contrib/compareTool/compareTool.js",
+      "enabled": true,
+      "buttonDomOrder": 4
     },
     {
       "name": "featureInfo",
-      "path": "./components/featureInfo/featureInfo.js",
-      "enabled": true
+      "path": "./components/core/featureInfo/featureInfo.js",
+      "enabled": false,
+      "buttonDomOrder": false
     },
     {
-      "name": "clickIndicator",
-      "path": "./components/clickIndicator/clickIndicator.js",
-      "enabled": true
+      "name": "featureInfo",
+      "path": "./components/contrib/featureInfoDAARD/featureInfo.js",
+      "enabled": true,
+      "buttonDomOrder": false
     },
     {
       "name": "backgroundSwitcher",
-      "path": "./components/backgroundSwitcher/backgroundSwitcher.js",
-      "enabled": true
+      "path": "./components/core/backgroundSwitcher/backgroundSwitcher.js",
+      "enabled": true,
+      "buttonDomOrder": false
     },
     {
-      "name": "enableTooltips",
-      "path": "./components/enableTooltips/enableTooltips.js",
-      "enabled": true
+      "name": "layerPanel",
+      "path": "./components/core/layerPanel/layerPanel.js",
+      "enabled": true,
+      "buttonDomOrder": 1,
+      "dependsOn": "layerPanelContainer"
+
+    },
+    {
+      "name": "layerStyle",
+      "path": "./components/core/layerStyle/layerStyle.js",
+      "enabled": true,
+      "buttonDomOrder": 2,
+      "dependsOn": "layerPanelContainer"
+    },
+    {
+      "name": "afterMarkupFinish",
+      "path": "./components/core/afterMarkupFinish/afterMarkupFinish.js",
+      "enabled": true,
+      "buttonDomOrder": false
+    },
+    {
+      "name": "debug",
+      "path": "./components/debug/catchEvents.js",
+      "enabled": true,
+      "buttonDomOrder": false
     }
   ]
 }

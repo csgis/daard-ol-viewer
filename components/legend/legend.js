@@ -1,75 +1,114 @@
-import { map, wmsSource } from '../core/mapSetup.js';
+import './legend.css';
 
 import Alpine from 'alpinejs';
+import ImageWMS from 'ol/source/ImageWMS.js';
+import VectorSource from 'ol/source/Vector.js';
 import feather from 'feather-icons';
+import { featureLayersGroup } from '../core/mapSetup/mapSetup.js';
+import {renderMarkupAndSetPluginReady} from '../core/helper.js'
 
-const createMarkup = () => {
+const createMarkupButton = () => {
     const buttonHtml = `
-        <div class="mx-1  order-5">
-            <button type="button" 
-                class="btn btn-danger btn-sm btn-circle" 
-                data-bs-toggle="tooltip" 
-                data-bs-placement="left" 
-                title="Legend"
-                @click="$store.legend.toggleLegend($el)"
-                :class="$store.legend.buttonIsActive ? 'bg-danger' : 'btn-light'">
-                ${feather.icons['info'].toSvg({ width: '16', height: '16' })}
-            </button>
-        </div>
-        `;
+      <div x-data="{ get legend() { return $store.legend; } }" class="mx-1" :class="'order-'+legend.buttonDomOrder" id="legendNavButton">
+        <button type="button" 
+          class="btn btn-danger btn-sm btn-circle" 
+          x-tooltip.placement.left="'Legend'"
+          @click="legend.toggleLegend($el)"
+          :class="legend.componentIsActive ? 'bg-danger' : 'btn-light'">
+          <i data-feather="info" class="size-16"></i>
+          </button>
+      </div>
+    `;
+  
+    // insert the plugin markup where we need it
+    document.getElementById('rightMiddleSlot').insertAdjacentHTML('beforeend', buttonHtml);
+
+  };
+
+const createMarkupContainer = () => {
 
     const slideOut = `
-        <div id="legend-gfx" class="bg-white w-100 my-1 shadow-sm" data-parent="#specialMarkupContainerSub" x-transition x-show="$store.legend.showLegend">
-            <img id="legend" class="m-2" />
-        </div>
-    `
+          <div x-data="{ get legend() { return $store.legend; } }" id="legendContainer">
+          <div x-show="legend.showLegend">
+              <div class="accordion" id="legendAccordion">
+                  <template x-for="item in legend.visibleLayers" :key="item.get('name')">
+                      <div class="accordion-item">
+                          <p class="accordion-header py-0">
+                              <button class="accordion-button py-1 btn-light btn-sm" type="button" @click="legend.toggleDetails(item)">
+                                  <span x-text="item.get('name')"></span>
+                              </button>
+                          </p>
+                          <div class="accordion-collapse collapse" :class="{'show': item.showDetails}">
+                              <div class="accordion-body">
+                                  <img :src="legend.getLegendUrl(item)" alt="" x-show="item.get('type') === 'WMS' || item.get('type') === 'geonode'">
+                                  <span x-show="item.get('type') !== 'WMS' && item.get('type') !== 'geonode'">This layer does not support dynamic legend creation.</span>
+                              </div>
+                          </div>
+                      </div>
+                  </template>
+              </div>
+          </div>
+      </div>
+    `;
+  
+    // Replace the content of rightBottomSlot
+    document.getElementById('rightBottomSlot').innerHTML = slideOut;
+  };
+  
 
-    var specialMarkupContainer = document.getElementById('specialMarkupContainer');
-    specialMarkupContainer.insertAdjacentHTML('beforeend', buttonHtml);
-    var specialMarkupContainerSub = document.getElementById('specialMarkupContainerSub');
-    specialMarkupContainerSub.insertAdjacentHTML('beforeend', slideOut);
-}
+const initialize = (buttonDomOrder) => {
+
+  Alpine.store('legend', {
+    componentIsActive: false,
+    buttonDomOrder: buttonDomOrder,
+    showLegend: false,
+    visibleLayers: featureLayersGroup.getLayers().getArray().filter(layer => layer.getVisible()),
+
+    toggleLegend() {
+      this.componentIsActive = !this.componentIsActive;
+      this.showLegend = !this.showLegend;
+      this.updateVisibleLayers();
+    },
+
+    updateVisibleLayers() {
+      this.visibleLayers = featureLayersGroup.getLayers().getArray().filter(layer => layer.getVisible());
+    },
+
+    getLegendUrl(layer) {
+      const source = layer.getSource();
+      let baseUrl = typeof source.getUrl === 'function' ? source.getUrl() : source.getUrl;
+      const rootUrlRegex = /(https?:\/\/[^/]+\/[^/]+)\//;
+      const match = baseUrl.match(rootUrlRegex);
+      const basePart = match ? match[1] : baseUrl;
+
+      if (layer.getSource() instanceof ImageWMS) {
+        return `${basePart}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=${source.getParams()['LAYERS']}`;
+      } else if (source instanceof VectorSource) {
+        return `${basePart}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=${layer.get('layername')}`;
+      } else {
+        return '';
+      }
+    },
+    toggleDetails(item) {
+      item.showDetails = !item.showDetails; // Toggle the visibility of the item
+    }
+  });
 
 
-// create a plugin store by use of alpinejs – name the store like the folder of your plugin
-const initialize = () => {
+  const domElementsToCreate = [ 
+    [createMarkupButton, '#legendNavButton'],
+    [createMarkupContainer, '#legendContainer']
+  ]
+  renderMarkupAndSetPluginReady(domElementsToCreate)
 
 
-    Alpine.store('legend', {
-        buttonIsActive: false,
-        showLegend: false,
-        toggleLegend($el){
-            this.buttonIsActive = !this.buttonIsActive;
-            this.showLegend = !this.showLegend;
-            document.activeElement.blur()
-        }
-        },
-    );
-
-    createMarkup()
-
-    const updateLegend = function(resolution, wmsSource) {
-        const graphicUrl = wmsSource.getLegendUrl(resolution);
-        const img = document.getElementById('legend');
-        img.src = graphicUrl;
-    };
-
-    // Initial legend
-    const resolution = map.getView().getResolution();
-    updateLegend(resolution, wmsSource);
-
-    // Update the legend when the resolution changes
-    map.getView().on('change:resolution', function (event) {
-    const resolution = event.target.getResolution();
-    updateLegend(resolution, wmsSource);
+  // Catch the custom event and execute a function to update the legend
+  document.addEventListener('mapLayerHaveChanged', function (event) {
+    console.debug('Custom event "mapLayerHaveChanged" caught. Updating legend Markup');
+    Alpine.store('legend').updateVisibleLayers();
+  });
 
 
-    });
-
-    Alpine.store('pluginStatus').increasePluginLoadingStatus();
-
-    
 };
-
 
 export { initialize };

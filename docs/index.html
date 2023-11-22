@@ -259,12 +259,28 @@
     </div>
   </div>
 
+  <div 
+  class="position-absolute start-0 top-0 bg-white h-100 w-40 p-3 ps-0 pt-0 shadow bg-light" 
+  z-index="2000" 
+  id="layerPanelContainer" 
+  x-show="$store.layerPanelContainer.componentIsActive" x-transition>
 
-  <div id="popup" class="ol-popup">
-    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-    <div id="popup-content"></div>
+  <div class="row">
+      <!-- Navigation -->
+      <div class="col-2 bg-secondary vh-100 p-0 d-flex flex-column" id="layerPanelContainerNavBar"></div>
+
+      <!-- Content -->
+      <div class="col-10 vh-100 p-0 border-0">
+          <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="layerPanelEditBodyLabel">&nbsp;</h5>
+              <button type="button" class="btn-close text-reset me-3 mt-3" data-bs-dismiss="offcanvas" aria-label="Close" @click="$store.layerPanelContainer.componentIsActive = false"></button>
+          </div>
+          <div class="offcanvas-body p-3" id="layerPanelContainerBody">
+          </div>
+      </div>
   </div>
 
+</div>
   
 </body>
 

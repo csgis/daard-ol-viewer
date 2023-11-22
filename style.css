@@ -17,8 +17,6 @@ html, body {
 }
 
 
-
-
 .iframe {
   width: 100%;
   height: 450px;
@@ -66,7 +64,7 @@ ul.datatable-pagination-list {
 }
 
 .btn-circle {
-  border-radius: 50px;
+  border-radius: 50px!important;
   box-shadow: 0px 1px 7px 0px rgba(0,0,0,0.33);
 }
 
@@ -96,3 +94,192 @@ ul.datatable-pagination-list {
 .backgroundSwitcher-item {
   box-shadow: 0px 1px 7px 0px rgba(0,0,0,0.33);
 }
+
+.opacity-5 {
+  opacity: .3!important;
+}
+
+.offcanvas-backdrop.show {
+  opacity: .2!important;
+}
+
+/* extend bootstrap width */
+
+.w-10 {
+  width: 10%!important;
+}
+
+.w-20 {
+  width: 20%!important;
+}
+
+.w-30 {
+  width: 30%!important;
+}
+
+.w-40 {
+  width: 40%!important;
+}
+
+.w-50 {
+  width: 50%!important;
+}
+
+.w-60 {
+  width: 60%!important;
+}
+
+.w-70 {
+  width: 70%!important;
+}
+
+.w-80 {
+  width: 80%!important;
+}
+
+.w-70 {
+  width: 70%!important;
+}
+
+.size-16 {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  transform: translate(0px, -1px);
+  }
+
+.size-20 {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transform: translate(0px, -1px);
+  }
+
+.size-20:hover{
+  stroke: green;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+
+
+      table.table.table-stripe {
+        font-size: 0.8rem;
+    }
+    
+    table.table.table-stripe tr td,
+    table.table.table-stripe tr th
+     {
+        padding: 5px 0 5px 0;
+    }
+    
+    #compare_button{
+      position: absolute;
+      top: 70px;
+    }
+    
+    .switch_icon{
+      font-size: 1.5rem;
+    }
+    
+    
+    /* The switch - the box around the slider */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+    
+    /* Hide default HTML checkbox */
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+      transform: translateY(5px);
+    }
+    
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      float: left
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+    
+    input:checked + .slider {
+      background-color: #397aab;
+    }
+    
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+    
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+    
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+    
+    .slider.round:before {
+      border-radius: 50%;
+    }
+    
+    span.daard-filter_label {
+        display: inline-block;
+        /* transform: translateY(18px); */
+        font-size: 1.2rem;
+    }
+    
+    /* search fild */
+    
+    input.daard-search {
+        font-size: 1.2rem;
+        /* transform: translateY(16px); */
+        margin-left: 12px;
+        padding: 10px;
+        height: 1.93rem;
+        border-top-style: hidden;
+        border-right-style: hidden;
+        border-left-style: hidden;
+        border-bottom-style: hidden;
+        background-color: #F8F9FA;
+    }
+
+    [x-cloak] { display: none !important; }

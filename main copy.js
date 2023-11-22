@@ -256,18 +256,14 @@ document.getElementById('filterForm').addEventListener('submit', function(event)
     }
   });
 
-  console.log('Enabled Filters:', enabledFilters);
 
   // Create CQL filter string
   const filterString = enabledFilters.map(element => `("${element.name}"${element.operator}'${element.value}')`);
-  console.log('Enabled filterString:', filterString);
 
   // Join filters with OR or AND depending on checkbox state
   const or_selector = document.getElementById('or_operator_selector');
   const join_str = or_selector.checked ? ' OR ' : ' AND ';
   const joinedFilters = filterString.join(join_str);
-
-  console.log('Joined Filters:', joinedFilters);
 
   // Update WMS source with CQL filter
   wmsSource.updateParams({ 'CQL_FILTER': joinedFilters });
