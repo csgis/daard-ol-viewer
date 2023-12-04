@@ -56,6 +56,12 @@
       "buttonDomOrder": false
     },
     {
+      "name": "mapMarker",
+      "path": "./components/core/mapMarker/mapMarker.js",
+      "enabled": true,
+      "buttonDomOrder": false
+    },
+    {
       "name": "backgroundSwitcher",
       "path": "./components/core/backgroundSwitcher/backgroundSwitcher.js",
       "enabled": true,

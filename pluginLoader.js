@@ -9,7 +9,7 @@ const loadPlugins = (map, view, parentsOnly = false) => {
 
     // Check condition based on parentsOnly flag
     if ((parentsOnly && pluginConfig.createsParentDOM) || (!parentsOnly && !pluginConfig.createsParentDOM)) {
-      const initializationPromise = import(pluginConfig.path).then((module) => {
+      const initializationPromise = import(pluginConfig.path /* @vite-ignore */).then((module) => {       
         if (module.initialize) {
           return module.initialize(pluginConfig.buttonDomOrder);
         }

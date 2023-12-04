@@ -14,7 +14,7 @@ const createFeatureInfoOffCanvasMarkup = () => {
   <!-- Offcanvas Header -->
   <div class="offcanvas-header d-flex justify-content-between">
     <h5 class="offcanvas-title" id="featuresOffcanvasLabel">Feature Information</h5>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" @click="$store.featureInfoStore.showOffCanvas = false"></button>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" @click="$store.featureInfoStore.closePanel()"></button>
   </div>
 
   <!-- Layer Selection -->
@@ -45,12 +45,14 @@ const createFeatureInfoOffCanvasMarkup = () => {
 
             <template x-for="[key, value] in Object.entries($store.featureInfoStore.filteredFeatures[$store.featureInfoStore.currentFeatureIndex].properties)" :key="key">
               <template x-if="$store.featureInfoStore.filteredFeatures">
-                <template x-if="$store.featureInfoStore.isBlacklistedKey(key)">
-                  <tr>
-                    <td><strong x-text="key"></strong></td>
-                    <td><span x-html="$store.featureInfoStore.buildLink(value)"></span></td>
-                  </tr>
-                </template>
+
+                  <template x-if="$store.featureInfoStore.isBlacklistedKey(key) && $store.featureInfoStore.valueIsSet(value)">
+                    <tr>
+                      <td><strong x-text="key"></strong></td>
+                      <td><span x-html="$store.featureInfoStore.buildLink(value)"></span></td>
+                    </tr>
+                  </template>
+
               </template>
               
             </template>
@@ -91,15 +93,20 @@ const initialize = () => {
     visibleLayers: [],
     selectedLayers: [],
     currentSkullSVG: "",
+    closePanel: function () {
+      this.showOffCanvas = false;
+      emitCustomEvent('deleteMapPins', {})
+    },
     buildLink: function(value){
       return buildLink(value)
     },
+    valueIsSet: function(value){
+      var ret = value !== false && value !== undefined && value !== null;
+      return ret;
+    },
     isBlacklistedKey: function(key) {
-      console.log('key is');
-      console.log(key);
       let blockedKeys = ['bone_relations', 'c_b_t_bc_rel', 'svgid', 'c_bones', 'bone_relations']
       let isNotBlocked = !blockedKeys.includes(key)
-      console.log(isNotBlocked)
       return isNotBlocked;
 
     },
@@ -157,7 +164,7 @@ const initialize = () => {
       this.visibleLayers.forEach(layer => this.processLayer(layer, evt.coordinate, viewResolution, () => {
         allLayersProcessed++;
         if (allLayersProcessed === totalVisibleLayers) {
-          this.updateAfterProcessing(evt); // Pass evt here
+          this.updateAfterProcessing(evt);
         }
       }));
     },
@@ -220,7 +227,15 @@ const initialize = () => {
     
       if (this.isFeaturesDictNotEmpty()) {
         this.showOffCanvas = true;
-        addClickIndicator(evt); // Use evt here
+        addClickIndicator(evt, 3); 
+
+        // add pin to vector layer
+        const coordinate = evt.coordinate;
+        const pin_coordinates = [[coordinate[0], coordinate[1]]]
+        emitCustomEvent('deleteMapPins', {})
+        emitCustomEvent('addMapPins', {"pin_coordinates": pin_coordinates, "fitView": true, moveCenterLeft: true})
+
+
       } else {
         console.log("The dictionary is empty.");
       }

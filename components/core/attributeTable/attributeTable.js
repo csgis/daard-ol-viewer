@@ -1,9 +1,10 @@
+import './attributeTable.css';
+
 import { boundingExtent, getCenter } from 'ol/extent';
+import { emitCustomEvent, getBaseUrl, isValidUrl } from '../helper.js'
 import { featureLayersGroup, map } from '../mapSetup/mapSetup.js'
-import { getBaseUrl, isValidUrl } from '../helper.js'
 
 import Alpine from 'alpinejs';
-import { DataTable } from "simple-datatables"
 import { WFS } from 'ol/format';
 import { addClickIndicator } from '../clickIndicator/clickIndicator.js';
 import feather from 'feather-icons';
@@ -11,8 +12,9 @@ import {renderMarkupAndSetPluginReady} from '../helper.js'
 
 // Function to fetch feature data from WFS
 const fetchFeatureData = (layerName) => {
-  console.warn("fetching feature data")
   const Layer = featureLayersGroup.getLayers().getArray().find(layer => layer.get('name') === layerName);
+
+  
   const LayerParams = Layer.getSource().getParams().LAYERS;
 
   const baseurl = getBaseUrl(featureLayersGroup.getLayers().getArray().find(layer => layer.get('name') === layerName).getSource().url_);
@@ -24,7 +26,6 @@ const fetchFeatureData = (layerName) => {
     outputFormat: 'application/json',
   });
 
-
   return fetch(`${baseurl}wfs`, {
     method: 'POST',
     body: new XMLSerializer().serializeToString(featureRequest),
@@ -34,161 +35,6 @@ const fetchFeatureData = (layerName) => {
   })
   .then(response => response.json());
 }
-
-// Function to generate table content
-const generateTableContent = (features) => {
-  let content = '<table class="attributesTable"><thead><tr>';
-  const attributes = features[0].properties;
-
-  content += `<th>zoom to</th>`;
-
-  for (const key in attributes) {
-    if (key == 'svgid' || key == "bone_relations" || key == "c_b_t_bc_rel" || key == "c_bones" || key == "references" || key == 'uuid'){
-      continue;
-    }
-    content += `<th>${key}</th>`;
-  }
-
-  content += '</tr></thead><tbody>';
-
-  features.forEach(feature => {
-    const properties = feature.properties;
-    content += '<tr>';
-    content += `<td><a href="#" data-id='${properties['fid']}' class='clicklink'>${feather.icons['map-pin'].toSvg({ width: '16', height: '16' })}</a></td>`;
-
-    for (const key in properties) {
-      if (key == 'svgid' || key == "bone_relations" || key == "c_b_t_bc_rel" || key == "c_bones" || key == "references" || key == 'uuid'){
-        continue;
-      }
-      if (isValidUrl(properties[key])) {
-        content += `<td><a href="${properties[key]}" target="_blank">${properties[key]}</a></td>`;
-      } else {
-        content += `<td>${properties[key]}</td>`;
-      }
-    }
-
-    content += '</tr>';
-  });
-
-  content += '</tbody></table>';
-
-  return content;
-}
-
-// Function to initialize DataTable
-const initializeDataTable = () => {
-  const tableElement = document.querySelector('.attributesTable');
-  if (tableElement) {
-    new DataTable('.attributesTable', {
-      perPage: 5,
-      class: 'table'
-    });
-
-    // Add classes to the table element
-    tableElement.classList.add('table');
-    tableElement.classList.add('table-striped');
-  } else {
-    console.error('Table element not found');
-  }
-
-  const searchInput = document.querySelector('.datatable-input');
-  if (searchInput) {
-    // Add classes to the search input
-    searchInput.classList.add('form-control');
-  } else {
-    console.error('Search input not found');
-  }
-}
-
-// Function to add event listener for clicklink
-const addClickLinkEventListener = (features) => {
-  
-  document.addEventListener('click', function(event) {
-    const clickLink = event.target.closest('a.clicklink');
-    if (clickLink) {
-      event.preventDefault();
-      const featureId = clickLink.getAttribute('data-id');
-      const feature = features.find(f => f.properties['fid'] == featureId);
-  
-      if (feature) {
-        const geometry = feature.geometry;
-        let extent;
-        let center;
-  
-        switch (geometry.type) {
-          case 'Point':
-            center = geometry.coordinates;
-            const buffer = 100; // Adjust buffer size as needed
-            extent = [
-              geometry.coordinates[0] - buffer, 
-              geometry.coordinates[1] - buffer, 
-              geometry.coordinates[0] + buffer, 
-              geometry.coordinates[1] + buffer
-            ];
-            var maxZoom = 13;
-            break;
-  
-          case 'Polygon':
-            extent = boundingExtent(geometry.coordinates[0].flat());
-            center = getCenter(extent);
-            var maxZoom = 15;
-            break;
-  
-          case 'MultiPolygon':
-            const allPolygons = geometry.coordinates.flat(2);
-            extent = boundingExtent(allPolygons);
-            center = getCenter(extent);
-            var maxZoom = 15;
-            break;
-  
-          case 'LineString':
-            extent = boundingExtent(geometry.coordinates);
-            center = getCenter(extent);
-            var maxZoom = 15;
-            break;
-  
-          case 'MultiLineString':
-            const allLines = geometry.coordinates.flat();
-            extent = boundingExtent(allLines);
-            center = getCenter(extent);
-            var maxZoom = 15;
-            break;
-  
-          default:
-            console.error('Unsupported geometry type:', geometry.type);
-            return;
-        }
-  
-        if (extent) {
-          console.log('Zooming to extent:', extent);
-          map.getView().fit(extent, { padding: [50, 50, 500, 50], maxZoom: maxZoom });
-          const indicatorEvent = { coordinate: center };
-          addClickIndicator(indicatorEvent);
-        }
-      }
-    }
-  });
-  
-  
-  
-}
-
-
-// Main function to get attribute table data
-const getAttributeTableData = () => {
-  fetchFeatureData()
-    .then(data => {
-      const features = data.features;
-      const content = generateTableContent(features);
-      this.currentTable = content;
-      addClickLinkEventListener(features);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-}
-
-
 
 const createMarkup = () => {
   // Plugin HTML Markup
@@ -201,7 +47,8 @@ const createMarkup = () => {
         x-tooltip.placement.left="'Attribute table'"
         @click="$store.attributeTable.process_attribute_table()"
         :class="$store.attributeTable.componentIsActive ? 'bg-danger' : 'btn-light'">
-        ${feather.icons['list'].toSvg({ width: '16', height: '16' })}
+        <i data-feather="list" class="size-16"></i>
+
       </button>
     </div>
       `
@@ -210,29 +57,134 @@ const createMarkup = () => {
   rightMiddleSlot.insertAdjacentHTML('beforeend', attributeTableNaavigationBtn);
 
   const attributeTableSlideOutHtml = `
-    <div id="attributeTable" class="position-absolute bottom-0 end-0 p-0 bg-white border-top" style="width: 100%; height: 57vh; z-index:1000" x-show="$store.attributeTable.componentIsActive">
+    <div id="attributeTable" class="position-absolute bottom-0 end-0 p-0 bg-white border-top" style="width: 100%; height: 40vh; z-index:1000" x-show="$store.attributeTable.componentIsActive">
       <div class="offcanvas-header d-flex justify-content-between align-items-center px-3 mt-3">
-        <div class="layer-select-container">
-          <select id="layerSelect" class="form-select form-select-sm">
-            <template x-for="option in $store.attributeTable.visisbleLayers">
-              <option :value="option.get('name')" x-text="option.get('name')"></option>
-            </template>
-          </select>
-        </div>
-        <button type="button" class="btn-close" aria-label="Close" @click="$store.attributeTable.componentIsActive = false"></button>
+          <div class="d-flex align-items-center">
+              <!-- Layer Selection -->
+              <div class="layer-select-container me-2">
+                  <select id="layerSelect" class="form-select form-select-sm">
+                      <template x-for="option in $store.attributeTable.visisbleLayers">
+                          <option :value="option.get('name')" x-text="option.get('name')"></option>
+                      </template>
+                  </select>
+              </div>
+              <!-- Row Count Selection -->
+              <div class="ms-2">
+                  <select x-model="$store.attributeTable.rowCount" class="form-select form-select-sm" id="rowCountSelect">
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="50">50</option>
+                  </select>
+              </div>
+          </div>
+
+          <div class="d-flex align-items-center">
+              <!-- Items Shown Indicator -->
+              <p class="mb-0 mx-3" x-text="$store.attributeTable.filteredFeatures().length + ' items shown'"></p>
+           
+              <!-- Search Input -->
+              <div class="d-flex me-2">
+                  <label for="searchInput" class="me-2 mb-0"><i class="bi bi-search"></i></label>
+                  <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Search..." x-model="$store.attributeTable.searchQuery" style="width: 200px;">
+              </div>
+
+              <!-- Close Button -->
+              <button type="button" class="btn-close" aria-label="Close" @click="$store.attributeTable.closePanel()"></button>
+          </div>
       </div>
 
-    <div class="offcanvas-body mt-4" id="attributeTableBody">
-      <div style="height: calc(100% - 1.5rem); width: 100%; overflow-y: auto;" class="px-3">
-        <div x-html="$store.attributeTable.currentTable || 'No data replied.'"></div>
-      </div>
+
+            <div class="offcanvas-body mt-4" id="attributeTableBody">
+
+              <!-- table -->
+              <div style="height: calc(100% - 1.5rem); width: 98%; overflow-y: auto;" class="px-3 ms-2">
+
+              <!-- Alpine.js Component for Feature Properties Table -->
+              <div x-cloak>
+                <template x-if="!$store.attributeTable.fetchSuccessful">
+                  <p>Sorry, no items received.</p>
+                </template>
+
+                <template x-if="$store.attributeTable.fetchSuccessful">
+                  <table class="attributesTable table table-sm table-striped" id="attributesTable">
+                    <thead>
+                        <tr>
+                          <th>zoom to</th>
+                          <template x-if="$store.attributeTable.features.length > 0">
+                            <template x-for="key in Object.keys($store.attributeTable.features[0].properties)" :key="key">
+                              <th x-show="!['svgid', 'bone_relations', 'c_b_t_bc_rel', 'c_bones', 'references', 'uuid'].includes(key)" x-text="key"></th>
+                            </template>
+                          </template>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <template x-for="feature in $store.attributeTable.paginatedFeatures()" :key="feature.id">
+                          <tr :class="$store.attributeTable.activeFeatures.includes(String(feature.properties['fid'])) ? 'highlight-row' : ''">
+                            <td>
+
+                            <p x-show="!$store.attributeTable.activeFeatures.includes(String(feature.properties['fid']))">
+                              <a href="#" :data-id="feature.properties['fid']" @click="$store.attributeTable.zoomTo()" >
+                                  <i data-feather="map-pin" class="size-16"></i>
+                              </a>      
+                            </p>
+
+                            <p x-show="$store.attributeTable.activeFeatures.includes(String(feature.properties['fid']))">
+                              <a href="#" :data-id="feature.properties['fid']" @click="$store.attributeTable.zoomTo()" >
+                                <i data-feather="check" class="size-16"></i>
+                              </a>      
+                            </p>
+
+                            </td>
+                            <template x-for="[key, value] in Object.entries(feature.properties)" :key="key">
+                              <td x-show="!['svgid', 'bone_relations', 'c_b_t_bc_rel', 'c_bones', 'references', 'uuid'].includes(key)">
+                                <span x-text="value"> </span>
+                              </td>
+                            </template>
+                          </tr>
+                        </template>
+                      </tbody>
+                  </table>
+                </template>
+                
+              </div>
+
+
+            
+            </div>
+            <!-- Pagination -->
+            <template x-if="$store.attributeTable.fetchSuccessful">
+
+              <nav aria-label="Page navigation">
+                <ul class="pagination pagination-sm justify-content-end me-5 mt-3">
+                  <!-- First Page Link -->
+                  <li class="page-item" :class="{ disabled: $store.attributeTable.currentPage === 1 }">
+                    <a class="page-link" href="#" @click.prevent="$store.attributeTable.setFirstPage()">
+                      First
+                    </a>
+                  </li>
+              
+                  <!-- Dynamic Page Links -->
+                  <template x-for="page in $store.attributeTable.pageRange()" :key="page">
+                    <li class="page-item" :class="{ active: $store.attributeTable.currentPage === page }">
+                      <a class="page-link" href="#" x-text="page" @click.prevent="$store.attributeTable.setPage(page)">
+                      </a>
+                    </li>
+                  </template>
+              
+                  <!-- Last Page Link -->
+                  <li class="page-item" :class="{ disabled: $store.attributeTable.currentPage === $store.attributeTable.totalPages() }">
+                    <a class="page-link" href="#" @click.prevent="$store.attributeTable.setLastPage()">
+                      Last
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+              </template>
     </div>
   </div>
 
   `
-  console.log("getting map div")
   var mapDIV = document.getElementById('map');
-  console.log(mapDIV);
   mapDIV.insertAdjacentHTML('afterend', attributeTableSlideOutHtml);
 
 
@@ -246,7 +198,161 @@ const initialize = () => {
   Alpine.store('attributeTable', {
     componentIsActive: false,
     visisbleLayers: [],
-    currentTable: false,
+    features: [],
+    activeFeatures: [],
+    isValidUrl: function(value){
+      return isValidUrl(value);
+    },
+
+    zoomToCoordinates: [],
+    closePanel: function(){
+      emitCustomEvent('deleteMapPins', {});
+      this.componentIsActive = false;
+      this.activeFeatures = [];
+      this.zoomToCoordinates = [];
+    },
+    zoomTo: function(){
+        const featureId = event.target.closest('a').getAttribute("data-id")
+        const feature = this.features.find(f => f.properties['fid'] == featureId);
+
+        if (feature) {
+          const geometry = feature.geometry;
+          let extent;
+          let center;
+          if (this.activeFeatures.includes(featureId)) {
+              this.activeFeatures = this.activeFeatures.filter(function(e) { return e !== featureId })
+          } else {
+              this.activeFeatures.push(featureId);
+          }
+
+    
+          switch (geometry.type) {
+            case 'Point':
+              center = geometry.coordinates;
+              const buffer = 100; // Adjust buffer size as needed
+              extent = [
+                geometry.coordinates[0] - buffer, 
+                geometry.coordinates[1] - buffer, 
+                geometry.coordinates[0] + buffer, 
+                geometry.coordinates[1] + buffer
+              ];
+              var maxZoom = 13;
+              break;
+    
+            case 'Polygon':
+              extent = boundingExtent(geometry.coordinates[0].flat());
+              center = getCenter(extent);
+              var maxZoom = 15;
+              break;
+    
+            case 'MultiPolygon':
+              const allPolygons = geometry.coordinates.flat(2);
+              extent = boundingExtent(allPolygons);
+              center = getCenter(extent);
+              var maxZoom = 15;
+              break;
+    
+            case 'LineString':
+              extent = boundingExtent(geometry.coordinates);
+              center = getCenter(extent);
+              var maxZoom = 15;
+              break;
+    
+            case 'MultiLineString':
+              const allLines = geometry.coordinates.flat();
+              extent = boundingExtent(allLines);
+              center = getCenter(extent);
+              var maxZoom = 15;
+              break;
+    
+            default:
+              console.error('Unsupported geometry type:', geometry.type);
+              return;
+          }
+    
+          if (extent) {
+
+            const coordIndex = this.zoomToCoordinates.findIndex(coord => 
+                coord[0] === center[0] && coord[1] === center[1]
+            );
+
+            if (coordIndex === -1) {
+                // Coordinate not found, add it
+                this.zoomToCoordinates.push([center[0], center[1]]);
+            } else {
+                // Coordinate found, remove it
+                this.zoomToCoordinates.splice(coordIndex, 1);
+            }
+
+            emitCustomEvent('deleteMapPins', {});
+            emitCustomEvent('addMapPins', {"pin_coordinates": this.zoomToCoordinates, "fitView": true, moveCenterLeft: false, bottomPadding: '40vh'});
+        }
+        }
+      
+    },
+    searchQuery: '',
+    rowCount: 5,
+    currentPage: 1,
+    fetchSuccessful: false,
+
+   // This function should now only filter features based on the search query
+    filteredFeatures: function() {
+      feather.replace();
+
+      const query = this.searchQuery.toLowerCase();
+      const filtered = this.features.filter(feature => {
+        return Object.entries(feature.properties).some(([key, value]) => {
+          if (typeof value === 'string' || typeof value === 'number') {
+            return value.toString().toLowerCase().includes(query);
+          }
+          return false;
+        });
+      });
+
+      console.log(`Filtered Features: Query = '${query}', Count = ${filtered.length}`);
+      return filtered;
+    },
+
+    // New function to get the features for the current page
+    paginatedFeatures: function() {
+      const start = (this.currentPage - 1) * this.rowCount;
+      const end = start + Number(this.rowCount);
+      const paginated = this.filteredFeatures().slice(start, end);
+      console.log(`Paginated Features: Current Page = ${this.currentPage}, Row Count = ${this.rowCount}, Start = ${start}, End = ${end}, Count = ${paginated.length}`);
+      return paginated;
+    },
+
+    // Adjust totalPages to use the length of filteredFeatures instead of paginatedFeatures
+    totalPages: function() {
+      const filteredCount = this.filteredFeatures().length;
+      return Math.ceil(filteredCount / this.rowCount);
+    },
+    setPage: function(page) {
+      this.currentPage = page;
+    },
+
+    pageRange: function() {
+      const range = 2; // Number of pages to display around the current page
+      const start = Math.max(1, this.currentPage - range);
+      const end = Math.min(this.totalPages(), this.currentPage + range);
+      let pages = [];
+  
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+  
+      return pages;
+    },
+  
+    setFirstPage: function() {
+      this.currentPage = 1;
+    },
+  
+    setPage: function(page) {
+      this.currentPage = page;
+      console.log(`Set Page: Current Page Set to = ${page}`);
+    },
+    
     process_attribute_table: function() {
       Alpine.store('pluginStatus').closeAllOffcanvas();
       this.componentIsActive = !this.componentIsActive;
@@ -262,25 +368,53 @@ const initialize = () => {
       }
     },
 
+    updateRowCount: function() {
+      this.currentPage = 1;
+      console.log(`Row Count Updated: New Row Count = ${this.rowCount}, Current Page Reset to = ${this.currentPage}`);
+    },
+
     updateTableForLayer: function(layerName = null) {
-      this.currentTable = false;
+      this.currentTable = true;
       const selectedLayer = layerName || document.getElementById('layerSelect').value;
+      const Layer = featureLayersGroup.getLayers().getArray().find(layer => layer.get('name') === selectedLayer);
+    
+      this.activeFeatures = [];
+      this.zoomToCoordinates = [];
+      emitCustomEvent('deleteMapPins', {});
+      emitCustomEvent('showLoading', {});
+
       fetchFeatureData(selectedLayer)
         .then(data => {
-          const features = data.features;
-          const content = generateTableContent(features);
-          this.currentTable = content;
-    
-          // Wait for Alpine to update the DOM
-          Alpine.nextTick(() => {
-            initializeDataTable();
-            addClickLinkEventListener(features);
-          });
+          if (data && data.features) {
+            if (Layer.get('dataset') && Layer.get('dataset')['attribute_set']) {
+              // Filter features based on the visibility defined in the dataset
+              const visibleAttributes = Layer.get('dataset')['attribute_set'].filter(attr => attr.visible).map(attr => attr.attribute);
+              this.features = data.features.map(feature => {
+                const filteredProperties = {};
+                visibleAttributes.forEach(attr => {
+                  if (feature.properties.hasOwnProperty(attr)) {
+                    filteredProperties[attr] = feature.properties[attr];
+                  }
+                });
+                return { ...feature, properties: filteredProperties };
+              });
+            } else {
+              // No dataset defined, use all features
+              this.features = data.features;
+            }
+            this.fetchSuccessful = true;
+          } else {
+            this.fetchSuccessful = false;
+          }
+          emitCustomEvent('hideLoading', {});
+
         })
         .catch(error => {
           console.error('Error:', error);
+          this.fetchSuccessful = false;
         });
     },
+    
   });
 
 
@@ -290,10 +424,10 @@ const initialize = () => {
   renderMarkupAndSetPluginReady(domElementsToCreate)
 
 
+  // Event listener for layer select change
   document.getElementById('layerSelect').addEventListener('change', function() {
     Alpine.store('attributeTable').updateTableForLayer(this.value);
   });
-
 
 };
 

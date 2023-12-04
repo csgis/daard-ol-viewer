@@ -35,13 +35,13 @@ html, body {
   overflow: scroll;
 }
 
-.datatable-table th {
+.attributesTable th {
   white-space: nowrap!important;
   overflow: hidden;
   font-size: 0.9rem;
 }
 
-.datatable-table td {
+.attributesTable td {
   white-space: nowrap!important;
   overflow: hidden;
   font-size: 0.9rem
@@ -283,3 +283,19 @@ ul.datatable-pagination-list {
     }
 
     [x-cloak] { display: none !important; }
+
+
+
+
+    #marker {
+      width: 20px;
+      height: 20px;
+      border: 1px solid #088;
+      border-radius: 10px;
+      background-color: #0FF;
+      opacity: 0.5;
+    }
+
+    .popover-body {
+      min-width: 276px;
+    }

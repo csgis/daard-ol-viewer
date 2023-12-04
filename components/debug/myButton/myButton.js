@@ -17,7 +17,6 @@ const createMarkup = () => {
                 @click="$store.myButton.rotate()"
                 :class="$store.myButton.componentIsActive ? 'bg-danger' : 'btn-light'">
                 <i data-feather="minimize" class="size-16"></i>
-
             </button>
         </div>
         `;
