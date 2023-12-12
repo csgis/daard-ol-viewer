@@ -75,12 +75,12 @@ const createOffCanvasMarkup = () => {
                 x-on:input="$store.layerPanel.changeLayerOpacity(index)" 
                 :disabled="!layer.getVisible()">
               </div>
-              <div class="col p-0 text-right">
+              <div class="col p-0 text-right ps-3">
                   <span 
                   x-tooltip.placement.top="'Layer Info'"
                   class="d-inline"
                   :class="{'disabled opacity-5' : (layer.get('type') !== 'geonode')}"
-                  @click="$store.layerPanel.zoomToLayerExtent(index)"
+                  @click="$store.layerPanel.openAbout(index)"
                   ><i data-feather="info" class="size-20"></i></span>
 
                   <span 
@@ -161,7 +161,7 @@ const createButtonMarkup = () => {
 const initialize = async (buttonDomOrder) => {
 
   const pluginStatus = Alpine.store('pluginStatus');
-  const showFilter = pluginStatus.registeredPluginNames.includes('filterLayer');
+  const showFilter = pluginStatus.registeredPluginNames.includes('filterLayer') || pluginStatus.registeredPluginNames.includes('geonodeCustomLayerFilter');
 
   Alpine.store('layerPanel', {
     componentIsActive: false,
@@ -216,6 +216,13 @@ const initialize = async (buttonDomOrder) => {
       } else {
         console.error('Invalid EPSG:4326 coordinates');
       }
+    },
+    openAbout: function(index){
+      const layer = this.ol_feature_layers[index];
+      const source = layer.getSource();
+      source.mapName = layer.get('name');
+      source.dataset = layer.get('dataset');
+      emitCustomEvent('aboutPushed', {"instance": source})
     },
     openFilter: function(index){
       const layer = this.ol_feature_layers[index];

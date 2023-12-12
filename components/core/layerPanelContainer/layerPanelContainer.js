@@ -18,7 +18,7 @@ const createContainerMarkup = () => {
             <div class="col-1 bg-secondary vh-100 p-0 pt-21 d-flex flex-column" id="layerPanelContainerNavBar"></div>
 
             <!-- Content -->
-            <div class="col-11 vh-100 p-0 border-0">
+            <div class="col-11 vh-100 p-0 border-0 overflow-hidden">
                 <div class="offcanvas-header">
                     <h5 class="offcanvas-title" id="layerPanelEditBodyLabel">&nbsp;</h5>
                     <button type="button" class="btn-close text-reset me-3 mt-3" data-bs-dismiss="offcanvas" aria-label="Close" @click="$store.layerPanelContainer.componentIsActive = false"></button>

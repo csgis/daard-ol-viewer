@@ -37,13 +37,10 @@ const createOffCanvasMarkup = () => {
     <div class="position-absolute start-0 top-0 bg-white h-100 w-40 p-3 shadow z-2 overflow-auto" x-transition tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel" x-show="$store.filterLayer.componentIsActive">
       <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="filterOffcanvasLabel" x-text="'Filter: ' + $store.filterLayer.mapName">Filter</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" @click="$store.filterLayer.componentIsActive = false;"></button>
+        <button type="button" class="btn-close text-reset" @click="$store.filterLayer.componentIsActive = false;"></button>
       </div>
 
       <div class="offcanvas-body">
-
-
-
 
             <template x-for="(layerEntry, layerIndex) in Object.entries($store.filterLayer.attributes || {})" :key="layerIndex">
             
@@ -56,7 +53,7 @@ const createOffCanvasMarkup = () => {
                   <hr>
 
                   <form id="filterForm" @submit.prevent>
-                          <div class="row mb-3 mt-3" id="filterHeader">
+                          <div class="row mb-3 mt-3 mx-0" id="filterHeader">
                             <div class="col-1">on</div>
                             <div class="col-3">name</div>
                             <div class="col-3">operator</div>
@@ -126,6 +123,7 @@ const initialize = () => {
         const filterString = enabledFilters.map(filter => `("${filter.name}"${filter.operator}'${filter.value}')`);
         const joinStr = form.querySelector('#or_operator_selector').checked ? ' OR ' : ' AND ';
         const joinedFilters = filterString.join(joinStr);
+        console.log("filters: " + joinedFilters)
         this.layer.updateParams({ 'CQL_FILTER': joinedFilters });
 
         // Update the layerVisibility Store so that icons are marked active

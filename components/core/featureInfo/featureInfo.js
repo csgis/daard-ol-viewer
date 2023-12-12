@@ -17,7 +17,7 @@ const createFeatureInfoOffCanvasMarkup = () => {
   <!-- Layer Selection -->
   <div class="my-3">
   <label for="layerSelect">Data found on the following layers:</label>
-  <select id="layerSelect" class="form-select" x-model="$store.featureInfoStore.selectedOption" x-on:change="$store.featureInfoStore.changeSelect($event.target.value)" :disabled="Object.keys($store.featureInfoStore.featuresDict).length == 1">
+  <select class="form-select" x-model="$store.featureInfoStore.selectedOption" x-on:change="$store.featureInfoStore.changeSelect($event.target.value)" :disabled="Object.keys($store.featureInfoStore.featuresDict).length == 1">
     <template x-for="option in Object.keys($store.featureInfoStore.featuresDict)" :key="option">
       <option :value="option" x-text="option"></option>
     </template>

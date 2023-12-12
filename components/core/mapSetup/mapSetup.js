@@ -10,12 +10,14 @@ import TileLayer from 'ol/layer/Tile.js';
 import VectorLayer from 'ol/layer/Vector.js';
 import VectorSource from 'ol/source/Vector.js';
 import View from 'ol/View.js';
+import { askUser } from '../../contrib/mapSourceWarning/mapSourceWarning';
 import basemapLayersJson from './basemapLayersConfig.js';
 import { customFeatureLayersJson } from './customFeatureLayersConfig.js';
+import { emitCustomEvent } from '../helper.js';
 import { fromLonLat } from 'ol/proj.js';
 import { updateJsonWithFetchData } from './updateJsonWithFetchData.js';
 
-// Define a function to create basemap layers dynamically based on JSON definition
+// Create basemap layers dynamically based on JSON definition
 const createBasemapLayersFromJson = (layerDefinitions) => {
   return layerDefinitions.map((layerDef) => {
     return new TileLayer({
@@ -31,7 +33,7 @@ const createBasemapLayersFromJson = (layerDefinitions) => {
   });
 };
 
-// Define a function to create feature layers dynamically based on JSON definition
+// Create feature layers dynamically based on JSON definition
 const createFeatureLayersFromJson = (layerDefinitions) => {
 
   console.debug("4. Start working on updating geonode json data and building ol feature layers ")
@@ -78,6 +80,10 @@ const createFeatureLayersFromJson = (layerDefinitions) => {
 
   return layers;
 };
+
+
+// askUser();
+
 
 // Baselayer loading
 const basemapLayers = createBasemapLayersFromJson(basemapLayersJson);

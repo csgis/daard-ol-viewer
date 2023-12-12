@@ -1,11 +1,9 @@
 
-  const getUniqueValues = function(row, filterName, valuesSelect, baseurl, layername) {
-    // if (Alpine.store('filterLayer').currentLayer !== layername) {
-    //   valuesSelect.innerHTML = 'loading'; 
-    //   Alpine.store('filterLayer').currentLayer = layername;
-    // }
-  
-    fetch(`${baseurl}/wps?service=WPS&outputFormat=json`, {
+  const getUniqueValues = function(filterName, baseurl, layername) {
+
+    console.log(filterName, baseurl, layername);
+
+   const p = fetch(`${baseurl}/wps?service=WPS&outputFormat=json`, {
       "headers": {
         "accept": "application/json",
         "accept-language": "de-DE,de;q=0.5",
@@ -66,24 +64,12 @@
       "method": "POST"
     })
     .then(response => response.json())
-    .then(data => {
-      if (!valuesSelect.classList.contains('updated')) {
-        valuesSelect.innerHTML = ''; 
-  
-        data.values.forEach(value => {
-          if (value !== "") {
-            const option = document.createElement('option');
-            option.value = value;
-            option.textContent = value;
-            valuesSelect.appendChild(option);
-            valuesSelect.classList.add('updated');
-          }
-        });
-      }
-    })
     .catch(error => {
       console.error('Error:', error);
     });
+
+    return p;
+
   };
   
   export { getUniqueValues };

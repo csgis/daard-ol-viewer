@@ -274,13 +274,8 @@ ul.datatable-pagination-list {
         /* transform: translateY(16px); */
         margin-left: 12px;
         padding: 10px;
-        height: 1.93rem;
-        border-top-style: hidden;
-        border-right-style: hidden;
-        border-left-style: hidden;
-        border-bottom-style: hidden;
-        background-color: #F8F9FA;
-    }
+        height: 1.93rem;    
+      }
 
     [x-cloak] { display: none !important; }
 

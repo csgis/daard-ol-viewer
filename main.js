@@ -1,76 +1,100 @@
 import './style.css';
 import 'tippy.js/dist/tippy.css';
 import "bootstrap/dist/css/bootstrap.min.css";
-import './node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 
-import { countEnabledPlugins, getEnabledPluginNames, loadPlugins } from './pluginLoader.js'; // Adjust the path as needed
+import { getEnabledPluginNames, loadPlugins } from './pluginLoader.js';
 import { map, view } from './components/core/mapSetup/mapSetup.js';
 
-import Alpine from 'alpinejs'
+import Alpine from 'alpinejs';
 import Tooltip from "@ryangjchandler/alpine-tooltip";
 import { emitCustomEvent } from './components/core/helper.js';
-import loader from './components/core/loadIndicator/loadIndicator.js'
-import persist from '@alpinejs/persist'
+import loader from './components/core/loadIndicator/loadIndicator.js';
+import persist from '@alpinejs/persist';
 
-// Init Alpine
-window.Alpine = Alpine.plugin(persist)
+// Initialize Alpine.js
+window.Alpine = Alpine;
+Alpine.plugin(persist);
 Alpine.plugin(Tooltip);
+Alpine.start();
 
+// Initialize loader
+loader();
 
 const enabledPlugins = getEnabledPluginNames();
 
+// Initialize Alpine Store
+initAlpineStore();
 
-// Store used for plugin handling
-Alpine.store('pluginStatus', {
-  registeredPluginsCount: 0,
-  registeredPluginNames: enabledPlugins.join(', '),
-  increasePluginLoadingStatus(){
-    this.registeredPluginsCount++;
-  },
-  closeAllOffcanvas(){
-    enabledPlugins.forEach(pluginName => {
-      Alpine.store(pluginName).componentIsActive =false
-    });
-  }
-})
+// Event Listener for Map Layer Loading
+document.addEventListener('featureMaplayersFinished', handleMapLayerFinish);
 
-// Iterate over each enabled plugin and create a store
-enabledPlugins.forEach(pluginName => {
-  Alpine.store(pluginName, {componentIsActive: false});
-});
+// Function Definitions Below
 
-Alpine.start()
-
-// Init the loader that stands out of other plugins
-loader();
-
-
-
-// Init plugin loading after map layers have finished loading
-document.addEventListener('featureMaplayersFinished', async (event) => {
-  console.debug('7. main.js received featureMaplayersFinished event');
-  
-  // Load parent components
-  console.debug('- Starting parent component initialization');
-  const parentComponentPromises = loadPlugins(map, view, true); // Load parent components
-  await Promise.all(parentComponentPromises);
-
-  // Load non-parent components
-  console.debug('- Parent components loaded, loading non-parent components');
-  const nonParentComponentPromises = loadPlugins(map, view, false); // Load non-parent components
-  await Promise.all(nonParentComponentPromises);
-
-  // Total number of plugins loaded
-  const totalPlugins = parentComponentPromises.length + nonParentComponentPromises.length;
-
-  // Check if all plugins are loaded
-  Alpine.effect(() => {
-    if (Alpine.store('pluginStatus').registeredPluginsCount === totalPlugins) {
-      // Trigger a custom event when all plugins are finished
-      const allPluginsFinishedLoadingEvent = new Event('allPluginsFinishedLoading');
-      document.dispatchEvent(allPluginsFinishedLoadingEvent);
-      console.debug(`${Alpine.store('pluginStatus').registeredPluginsCount} plugins finished Loading`);
-      emitCustomEvent('hideLoading', {});
+async function loadParentComponents() {
+    try {
+        const parentPromises = loadPlugins(map, view, true);
+        await Promise.all(parentPromises);
+        console.log("Finished loading all parent components");
+        return parentPromises.length;
+    } catch (error) {
+        console.error('Error in loading parent components:', error);
+        return 0;
     }
-  });
-});
+}
+
+async function loadChildComponents() {
+    try {
+        const childPromises = loadPlugins(map, view, false);
+        await Promise.all(childPromises);
+        console.log("Finished loading all non-parent components");
+        return childPromises.length;
+    } catch (error) {
+        console.error('Error in loading non-parent components:', error);
+        return 0;
+    }
+}
+
+async function handleMapLayerFinish(event) {
+    console.debug('Main.js received featureMaplayersFinished event');
+
+    const parentCount = await loadParentComponents();
+    const childCount = await loadChildComponents();
+    const totalPlugins = parentCount + childCount;
+
+    console.log(`Total plugins loaded: ${totalPlugins}`);
+    checkPluginLoadingCompletion(totalPlugins);
+}
+
+function initAlpineStore() {
+    Alpine.store('pluginStatus', {
+        registeredPluginsCount: 0,
+        mapClickEnabled: true,
+        registeredPluginNames: enabledPlugins.join(', '),
+        increasePluginLoadingStatus() {
+            this.registeredPluginsCount++;
+        },
+        closeAllOffcanvas(currentComponentName) {
+            enabledPlugins.forEach(pluginName => {
+                if (pluginName !== currentComponentName) {
+                    Alpine.store(pluginName).componentIsActive = false;
+                }
+            });
+        }
+    });
+
+    // Initialize store for each enabled plugin
+    enabledPlugins.forEach(pluginName => {
+        Alpine.store(pluginName, { componentIsActive: false });
+    });
+}
+
+function checkPluginLoadingCompletion(totalPlugins) {
+    Alpine.effect(() => {
+        if (Alpine.store('pluginStatus').registeredPluginsCount === totalPlugins) {
+            const allPluginsFinishedLoadingEvent = new Event('allPluginsFinishedLoading');
+            document.dispatchEvent(allPluginsFinishedLoadingEvent);
+            console.debug(`${totalPlugins} plugins finished loading`);
+            emitCustomEvent('hideLoading', {});
+        }
+    });
+}

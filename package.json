@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "scripts": {
     "start": "vite",
-    "build": "vite build",
+    "build": "vite build && shx cp -r ./assets/img ./dist/assets",
     "serve": "vite preview"
   },
   "devDependencies": {
+    "shx": "^0.3.4",
     "vite": "^4.5.0"
   },
   "dependencies": {

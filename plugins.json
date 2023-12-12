@@ -3,15 +3,27 @@
     {
       "name": "layerPanelContainer",
       "path": "./components/core/layerPanelContainer/layerPanelContainer.js",
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": 1,
       "createsParentDOM": true
     },
     {
       "name": "myButton",
       "path": "./components/debug/myButton/myButton.js",
+      "enabled": true,
+      "buttonDomOrder": 2
+    },
+    {
+      "name": "mapSourceWarning",
+      "path": "./components/contrib/mapSourceWarning/mapSourceWarning.js",
       "enabled": false,
       "buttonDomOrder": 2
+    },
+    {
+      "name": "DAARDFilterButton",
+      "path": "./components/contrib/DAARDFilterButton/DAARDFilterButton.js",
+      "enabled": false,
+      "buttonDomOrder": 8
     },
     {
       "name": "myButton",
@@ -22,25 +34,37 @@
     {
       "name": "legend",
       "path": "./components/legend/legend.js",
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": 2
+    },
+    {
+      "name": "aboutLayer",
+      "path": "./components/core/aboutLayer/aboutLayer.js",
+      "enabled": false,
+      "buttonDomOrder": false
     },
     {
       "name": "filterLayer",
       "path": "./components/core/filterLayer/filterLayer.js",
-      "enabled": true,
+      "enabled": false,
+      "buttonDomOrder": false
+    },
+    {
+      "name": "geonodeCustomLayerFilter",
+      "path": "./components/core/geonodeCustomLayerFilter/geonodeCustomLayerFilter.js",
+      "enabled": false,
       "buttonDomOrder": false
     },
     {
       "name": "attributeTable",
       "path": "./components/core/attributeTable/attributeTable.js",
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": 3
     },
     {
       "name": "compareTool",
       "path": "./components/contrib/compareTool/compareTool.js",
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": 4
     },
     {
@@ -52,33 +76,32 @@
     {
       "name": "featureInfo",
       "path": "./components/contrib/featureInfoDAARD/featureInfo.js",
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": false
     },
     {
       "name": "mapMarker",
       "path": "./components/core/mapMarker/mapMarker.js",
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": false
     },
     {
       "name": "backgroundSwitcher",
       "path": "./components/core/backgroundSwitcher/backgroundSwitcher.js",
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": false
     },
     {
       "name": "layerPanel",
       "path": "./components/core/layerPanel/layerPanel.js",
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": 1,
       "dependsOn": "layerPanelContainer"
-
     },
     {
       "name": "layerStyle",
       "path": "./components/core/layerStyle/layerStyle.js",
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": 2,
       "dependsOn": "layerPanelContainer"
     },
@@ -91,7 +114,7 @@
     {
       "name": "debug",
       "path": "./components/debug/catchEvents.js",
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": false
     }
   ]

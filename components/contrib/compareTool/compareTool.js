@@ -1,43 +1,42 @@
 import Alpine from 'alpinejs';
 import autoTable from 'jspdf-autotable'
 import feather from 'feather-icons';
+import { generateColoredSvg } from '../featureInfoDAARD/bonesSvgGenerator.js';
 import jsPDF from 'jspdf'
 import { renderMarkupAndSetPluginReady } from '../../core/helper.js'
-if (typeof bootstrap !== 'undefined') {
-  console.log('Bootstrap is loaded!');
-} else {
-  console.error('Bootstrap is not loaded!');
-}
 
 const createOffCanvasMarkup = () => {
 
   let compareToolMarkup = `
-    <div id="library" class="offcanvas offcanvas-bottom" tabindex="-1" aria-labelledby="libraryLabel" style="width: 100%; height: 100vh">
+    <div id="library" class="position-absolute bottom-0 end-0 p-0 bg-white border-top" x-transision style="width: 100%; height: 100vh; z-index:1000"  tabindex="-1" aria-labelledby="libraryLabel" style="width: 100%; height: 100vh" x-show="$store.compareTool.componentIsActive">
 
-        <div class="offcanvas-header">
+        <div class="offcanvas-header" style="height: 4rem">
         
             <!-- left toolbar  -->
-            <div x-data class="ms-3" style="line-height: 0px;">
-                <label class="switch">
+            <div x-data class="ms-4 pt-3" style="line-height: 0px;">
+                <label class="switch mb-0 ms-3">
                   <input type="checkbox"
                   @click="$store.compareTool.show_table = !$store.compareTool.show_table"
                   :checked="$store.compareTool.show_table">
                   <span class="slider round"></span>
                 </label><span class="ms-2 daard-filter_label">show table</span>
             
-                <label class="switch ms-3">
+                <label class="switch ms-3 mb-0">
                   <input type="checkbox"
                   @click="$store.compareTool.show_skull = !$store.compareTool.show_skull"
                   :checked="$store.compareTool.show_skull">
                   <span class="slider round"></span>
                 </label><span class="ms-2 daard-filter_label">show skeleton</span>
             
-                  <input type="text" class="daard-search" placeholder="filter by name" x-model="$store.compareTool.search">
+                  <input type="text" class="daard-search border-dark border-1 mb-3 border rounded-pill" placeholder="filter by name" x-model="$store.compareTool.search">
+
+
+                  
             </div>
 
                 <!-- right hand toolbar -->
                 <h5 id="offcanvasRightLabel"></h5>
-                <div class="me-3" x-data>
+                <div class="me-3 mt-2" x-data>
                   <button class="btn btn-danger ms-3" @click="$store.compareTool.items.disease_case = []"
                   style="transform: translateY(-3px); background: #c53e4a">remove all</button>
                   <button 
@@ -51,12 +50,13 @@ const createOffCanvasMarkup = () => {
                     type="button" 
                     data-bs-dismiss="offcanvas" 
                     aria-label="Close"
-                    class="btn btn-light ms-1" style="transform: translateY(-3px);">close</button>
+                    @click="$store.compareTool.componentIsActive=false"
+                    class="btn btn-dark ms-1" style="transform: translateY(-3px);">close</button>
                 </div>
         </div>
 
         <div class="offcanvas-body" id="offcanvas-body" x-data>
-          <section class="bg-light pt-5 pb-5 shadow-sm h-100 ps-4 p4-4" style="overflow: auto">
+          <section class="bg-light pt-5 pb-5 shadow-sm ps-4 p4-4" style="overflow: auto; height: 100vh">
             <div class="container-fluid">
               <div class="row">
               <template x-data x-for="(disease, index) in $store.compareTool.search_result()">
@@ -68,50 +68,57 @@ const createOffCanvasMarkup = () => {
                     </div>
 
                     <div class="card-body d-flex flex-column" x-show="$store.compareTool.items.disease_case.length > 0">
-                      <table class="table table-stripe" x-show="$store.compareTool.show_table">
+                      <table class="table table-stripe" x-show="$store.compareTool.show_table" x-transition>
                           <tbody>
                             <tr style="display: none;">
                               <th>Name</th>
-                              <th x-text="disease.properties.disease"></th>
+                              <th x-text="disease.properties.disease || '-'"></th>
                             </tr>
                             <tr>
                               <td style="width:180px">Sex</td>
-                              <td x-text="disease.properties.sex"></td>
+                              <td x-text="disease.properties.sex || '-'"></td>
                             </tr>
                             <tr>
                               <td>Age class</td>
-                              <td x-text="disease.properties.age_class"></td>
+                              <td x-text="disease.properties.age_class || '-'"></td>
                             </tr>
                             <tr>
                               <td>Narrower age</td>
-                              <td x-text="disease.properties.age_freetext"></td>
+                              <td x-text="disease.properties.age_freetext || '-'"></td>
                             </tr>
                             <tr>
                               <td>Site</td>
-                              <td x-text="disease.properties.site"></td>
+                              <td x-text="disease.properties.site || '-'"></td>
                             </tr>
                             <tr>
                               <td>Storage place</td>
-                              <td x-text="disease.properties.storage_place"></td>
+                              <td x-text="disease.properties.storage_place || '-'"></td>
                             </tr>
                             <tr>
                               <td>Time period</td>
-                              <td x-text="disease.properties.chronology"></td>
+                              <td x-text="disease.properties.chronology || '-'"></td>
                             </tr>
                             <tr>
                               <td>Narrower time period</td>
-                              <td x-text="disease.properties.chronology_freetext"></td>
+                              <td x-text="disease.properties.chronology_freetext || '-'"></td>
                             </tr>
-                          <tr style="display: none;">
-                            <td>Inventory</td>
-                            <td x-html="disease.properties.c_b_t_bc_rel"></td>
-                          </tr>
                           </tbody>
                         </table>
 
-                  <div x-show="$store.compareTool.show_skull" class="h-100 d-flex align-items-center justify-content-center">
-                     <iframe x-data x-show="$store.compareTool.show_skull" style="overflow: hidden; border: 0;" :src="'https://geoserver.dainst.org/daard/boneimage?bones='+disease.properties.svgid" width="400" height="700" scrolling="no" data-mce-fragment="1"></iframe>
-                   </div> 
+                   <div  class="h-100 d-flex align-items-center justify-content-center">
+                      <div class="row w-100" x-show="$store.compareTool.show_skull" x-transition>
+                        <div class="col-6" x-html="$store.compareTool.svgContent(disease.properties.svgid)"></div>
+                        <div class="col-6">
+                        <div class="legend col">
+                            <div class="rect dark"></div> bone preservation &gt;75% <br>
+                            <div class="rect grey"></div> bone preservation &lt;75% <br>
+                            <div class="rect pale"></div> affected <br>
+                            <div class="rect white"></div>  unknown / absent <br>
+                        </div>
+                        </div>
+                      </div>
+                  </template>
+
 
                     </div>
 
@@ -237,10 +244,13 @@ const initialize = (map, view) => {
     show_table : Alpine.$persist(true),
     show_skull : Alpine.$persist(true),
     search: "",
+    svgContent: function(value){
+      let decoded = decodeURIComponent(value)
+      let json_str = JSON.stringify(decoded);
+      return generateColoredSvg(decoded);
+    },
     openCanvas(){
-      var offcanvasElement = document.getElementById('library');
-      var offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-      offcanvas.show();
+      this.componentIsActive = !this.componentIsActive ;
     },
     update_disease_case_store(item_uuid){
         let is_uuid_present = this.items.disease_case.find(
@@ -276,10 +286,6 @@ const initialize = (map, view) => {
     }
   });
 
-  // var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-  // var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-  //   return new bootstrap.Tooltip(tooltipTriggerEl)
-  // })
 
   // Catch WFS request
   var elements = [];

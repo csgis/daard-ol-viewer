@@ -1,26 +1,31 @@
 import Alpine from 'alpinejs';
-import pluginsConfig from './plugins.json';
+import { pluginsConfig } from "./plugins.js";
 
 const loadPlugins = (map, view, parentsOnly = false) => {
   const initializationPromises = [];
 
   for (const pluginConfig of pluginsConfig.plugins) {
     if (!pluginConfig.enabled) continue;
-
-    // Check condition based on parentsOnly flag
     if ((parentsOnly && pluginConfig.createsParentDOM) || (!parentsOnly && !pluginConfig.createsParentDOM)) {
-      const initializationPromise = import(pluginConfig.path /* @vite-ignore */).then((module) => {       
+      const initializationPromise = pluginConfig.component().then((module) => {       
         if (module.initialize) {
-          return module.initialize(pluginConfig.buttonDomOrder);
+          return module.initialize(pluginConfig.buttonDomOrder) || null;
         }
+        return null;
+      }).catch(error => {
+        console.error('Error loading component for plugin:', pluginConfig.name, error);
+        return null; 
       });
 
       initializationPromises.push(initializationPromise);
     }
   }
 
-  return initializationPromises;
+  console.log('Initialization promises:', initializationPromises);
+  return initializationPromises; 
 };
+
+
 // Function to count the number of enabled plugins
 const countEnabledPlugins = () => {
   return pluginsConfig.plugins.reduce((count, plugin) => {

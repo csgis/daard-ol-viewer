@@ -1,22 +1,20 @@
-import './myButton.css'
-
-import {map, view} from '../../core/mapSetup/mapSetup.js'
+import { emitCustomEvent, renderMarkupAndSetPluginReady } from '../../core/helper.js'
+import {featureLayersGroup, map, view} from '../../core/mapSetup/mapSetup.js'
 
 import Alpine from 'alpinejs';
 import feather from 'feather-icons';
 import { fromLonLat } from 'ol/proj.js';
-import { renderMarkupAndSetPluginReady } from '../../core/helper.js'
 
 const createMarkup = () => {
     // define plugin html markup
     const buttonHtml = `
-        <div class="mx-1" id="myButtonNav" :class="'order-'+$store.myButton.buttonDomOrder">
+        <div class="mx-1" id="DAARDFilterButtonNav" :class="'order-'+$store.DAARDFilterButton.buttonDomOrder">
             <button type="button" 
                 class="btn btn-danger btn-sm btn-circle" 
-                x-tooltip.placement.left="'Demo button'"
-                @click="$store.myButton.rotate()"
-                :class="$store.myButton.componentIsActive ? 'bg-danger' : 'btn-light'">
-                <i data-feather="minimize" class="size-16"></i>
+                x-tooltip.placement.left="'Filter disease cases'"
+                @click="$store.DAARDFilterButton.openFilter()"
+                :class="$store.DAARDFilterButton.componentIsActive ? 'bg-danger' : 'btn-light'">
+                <i data-feather="filter" class="size-16"></i>
             </button>
         </div>
         `;
@@ -30,27 +28,26 @@ const createMarkup = () => {
 // create a plugin store by use of alpinejs – name the store like the folder of your plugin
 const initialize = async (buttonDomOrder) => {
     
-    Alpine.store('myButton', {
+    Alpine.store('DAARDFilterButton', {
         componentIsActive: false,
         buttonDomOrder: buttonDomOrder,
-        rotate: function() {
-            view.animate({
-                center: fromLonLat([28.9744, 41.0128]),
-                zoom: 8,
-                duration: 1000
-            });
+        openFilter: function() {
+            
+            const layer = featureLayersGroup.getLayers().getArray()[1];
+            const source = layer.getSource();
+            source.mapName = layer.get('name');
+            source.dataset = layer.get('dataset');
+            emitCustomEvent('filterPushed', {"instance": source})
         }
     });
 
     // [function name that creates the DOM Element, Element to check for presence}
     const domElementsToCreate = [
-        [createMarkup, '#myButtonNav'],
+        [createMarkup, '#DAARDFilterButtonNav'],
     ]
 
     // this function tirggers the rendering and tells main.js that initialization is finished
     renderMarkupAndSetPluginReady(domElementsToCreate)
-
-    console.log("ini mybutton")
 
 };
 

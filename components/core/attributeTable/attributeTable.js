@@ -7,6 +7,7 @@ import { featureLayersGroup, map } from '../mapSetup/mapSetup.js'
 import Alpine from 'alpinejs';
 import { WFS } from 'ol/format';
 import { addClickIndicator } from '../clickIndicator/clickIndicator.js';
+import { decorateValue } from '../contentDecorator/contentDecorator.js';
 import feather from 'feather-icons';
 import {renderMarkupAndSetPluginReady} from '../helper.js'
 
@@ -57,7 +58,7 @@ const createMarkup = () => {
   rightMiddleSlot.insertAdjacentHTML('beforeend', attributeTableNaavigationBtn);
 
   const attributeTableSlideOutHtml = `
-    <div id="attributeTable" class="position-absolute bottom-0 end-0 p-0 bg-white border-top" style="width: 100%; height: 40vh; z-index:1000" x-show="$store.attributeTable.componentIsActive">
+    <div id="attributeTable" class="position-absolute bottom-0 end-0 p-0 bg-white border-top px-1" style="width: 100%; height: 40vh; z-index:1000" x-show="$store.attributeTable.componentIsActive">
       <div class="offcanvas-header d-flex justify-content-between align-items-center px-3 mt-3">
           <div class="d-flex align-items-center">
               <!-- Layer Selection -->
@@ -94,10 +95,10 @@ const createMarkup = () => {
       </div>
 
 
-            <div class="offcanvas-body mt-4" id="attributeTableBody">
+            <div class="offcanvas-body mt-4 px-3" id="attributeTableBody">
 
               <!-- table -->
-              <div style="height: calc(100% - 1.5rem); width: 98%; overflow-y: auto;" class="px-3 ms-2">
+              <div style="width: 100%; overflow-y: auto;">
 
               <!-- Alpine.js Component for Feature Properties Table -->
               <div x-cloak>
@@ -106,13 +107,17 @@ const createMarkup = () => {
                 </template>
 
                 <template x-if="$store.attributeTable.fetchSuccessful">
-                  <table class="attributesTable table table-sm table-striped" id="attributesTable">
+                  <table class="attributesTable table table-sm table-striped mb-0" id="attributesTable">
                     <thead>
                         <tr>
-                          <th>zoom to</th>
+                          <th>
+                            <span class="attributTable_col" x-text="'zoom to'"></span>
+                          </th>
                           <template x-if="$store.attributeTable.features.length > 0">
                             <template x-for="key in Object.keys($store.attributeTable.features[0].properties)" :key="key">
-                              <th x-show="!['svgid', 'bone_relations', 'c_b_t_bc_rel', 'c_bones', 'references', 'uuid'].includes(key)" x-text="key"></th>
+                              <th>
+                                <span class="attributTable_col" x-text="key"></span>
+                              </th>
                             </template>
                           </template>
                         </tr>
@@ -121,7 +126,6 @@ const createMarkup = () => {
                           <template x-for="feature in $store.attributeTable.paginatedFeatures()" :key="feature.id">
                           <tr :class="$store.attributeTable.activeFeatures.includes(String(feature.properties['fid'])) ? 'highlight-row' : ''">
                             <td>
-
                             <p x-show="!$store.attributeTable.activeFeatures.includes(String(feature.properties['fid']))">
                               <a href="#" :data-id="feature.properties['fid']" @click="$store.attributeTable.zoomTo()" >
                                   <i data-feather="map-pin" class="size-16"></i>
@@ -136,8 +140,8 @@ const createMarkup = () => {
 
                             </td>
                             <template x-for="[key, value] in Object.entries(feature.properties)" :key="key">
-                              <td x-show="!['svgid', 'bone_relations', 'c_b_t_bc_rel', 'c_bones', 'references', 'uuid'].includes(key)">
-                                <span x-text="value"> </span>
+                              <td>
+                                <span class="attributTable_col" x-html="$store.attributeTable.decorateValue(value)"> </span>
                               </td>
                             </template>
                           </tr>
@@ -155,7 +159,7 @@ const createMarkup = () => {
             <template x-if="$store.attributeTable.fetchSuccessful">
 
               <nav aria-label="Page navigation">
-                <ul class="pagination pagination-sm justify-content-end me-5 mt-3">
+                <ul class="pagination pagination-sm justify-content-end mt-3">
                   <!-- First Page Link -->
                   <li class="page-item" :class="{ disabled: $store.attributeTable.currentPage === 1 }">
                     <a class="page-link" href="#" @click.prevent="$store.attributeTable.setFirstPage()">
@@ -210,6 +214,8 @@ const initialize = () => {
       this.componentIsActive = false;
       this.activeFeatures = [];
       this.zoomToCoordinates = [];
+      Alpine.store('pluginStatus').mapClickEnabled = true;
+
     },
     zoomTo: function(){
         const featureId = event.target.closest('a').getAttribute("data-id")
@@ -294,7 +300,10 @@ const initialize = () => {
     rowCount: 5,
     currentPage: 1,
     fetchSuccessful: false,
-
+    decorateValue: function(value) {
+      const decoratedValue = decorateValue(value, ['createLinkForUrl', 'decodeUrl']);
+      return decoratedValue;
+    },
    // This function should now only filter features based on the search query
     filteredFeatures: function() {
       feather.replace();
@@ -354,8 +363,10 @@ const initialize = () => {
     },
     
     process_attribute_table: function() {
-      Alpine.store('pluginStatus').closeAllOffcanvas();
+      Alpine.store('pluginStatus').closeAllOffcanvas('attributeTable');
       this.componentIsActive = !this.componentIsActive;
+      Alpine.store('pluginStatus').mapClickEnabled = this.componentIsActive ? false : true;
+
       this.populateLayerSelect();
     },
 
