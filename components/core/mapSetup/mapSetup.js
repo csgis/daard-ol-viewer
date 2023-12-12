@@ -100,8 +100,9 @@ const vector = new VectorLayer({
 
 // Map and View
 const view = new View({
-  center: fromLonLat([34.8, 31.46667]),
-  zoom: 9,
+  center: fromLonLat([0,0]),
+  // center: fromLonLat([34.8, 31.46667]),
+  zoom: 1,
 });
 
 const map = new Map({
