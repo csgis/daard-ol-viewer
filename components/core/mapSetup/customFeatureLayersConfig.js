@@ -26,7 +26,7 @@ const customFeatureLayersJson = [
     url: 'https://stable.demo.geonode.org/',
     id: 8452,
     name: 'tl_2020_05001_roads',
-    visible: true
+    visible: false
   },
   {
     type: 'geonode',
@@ -48,7 +48,7 @@ const customFeatureLayersJson = [
     url: 'https://stable.demo.geonode.org/',
     id: 8610,
     name: 'progress',
-    visible: true
+    visible: false
   }
 ];
 

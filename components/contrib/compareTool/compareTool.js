@@ -143,11 +143,11 @@ const createButtonMarkup = () => {
     <button 
       id="compareToolBtn"
       type="button" 
-      class="btn btn-warning btn-sm btn-circle" 
+      class="btn btn-light btn-sm btn-circle" 
       aria-controls="library"
       x-tooltip.placement.left="'Compare Library'"
       @click="$store.compareTool.openCanvas()"
-      :class="$store.compareTool.componentIsActive ? 'bg-danger' : 'btn-warning'">
+      :class="$store.compareTool.componentIsActive ? 'bg-danger' : 'btn-light'">
       ${feather.icons['grid'].toSvg({ width: '16', height: '16' })}
     </button>
     </div>

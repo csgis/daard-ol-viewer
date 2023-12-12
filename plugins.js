@@ -3,7 +3,7 @@ const pluginsConfig = {
     {
       "name": "myButton",
       "component": () => import("./components/debug/myButton/myButton.js"),
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": 2
     },
     {
@@ -15,7 +15,7 @@ const pluginsConfig = {
     {
       "name": "layerPanelContainer",
       "component": () => import("./components/core/layerPanelContainer/layerPanelContainer.js"),
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": 1,
       "createsParentDOM": true
     },
@@ -40,7 +40,7 @@ const pluginsConfig = {
     {
       "name": "aboutLayer",
       "component": () => import("./components/core/aboutLayer/aboutLayer.js"),
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": false
     },
     {
@@ -94,21 +94,21 @@ const pluginsConfig = {
     {
       "name": "layerPanel",
       "component": () => import("./components/core/layerPanel/layerPanel.js"),
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": 1,
       "dependsOn": "layerPanelContainer"
     },
     {
       "name": "layerStyle",
       "component": () => import("./components/core/layerStyle/layerStyle.js"),
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": 2,
       "dependsOn": "layerPanelContainer"
     },
     {
       "name": "debug",
       "component": () => import("./components/debug/catchEvents.js"),
-      "enabled": true,
+      "enabled": false,
       "buttonDomOrder": false
     },
     {

@@ -1,9 +1,9 @@
 import { countEnabledPlugins, getEnabledPluginNames, loadPlugins } from '../../../pluginLoader'
+import { emitCustomEvent, renderMarkupAndSetPluginReady } from '../../core/helper.js'
 
 import Alpine from 'alpinejs';
 import feather from 'feather-icons';
 import { getUniqueValues } from './uniqueValues.js';
-import { renderMarkupAndSetPluginReady } from '../../core/helper.js'
 import { slugify } from '../../core/helper.js';
 import { testCORS } from '../../core/helper/testCors';
 
@@ -18,7 +18,7 @@ const createOffCanvasMarkup = () => {
         x-show="$store.geonodeCustomLayerFilter.componentIsActive">
       <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="filterOffcanvasLabel" x-text="'Filter: ' + $store.geonodeCustomLayerFilter.currentLayerName">Filter</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" @click="$store.geonodeCustomLayerFilter.componentIsActive = false;"></button>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" @click="$store.geonodeCustomLayerFilter.closeComponent;"></button>
       </div>
 
       <div class="offcanvas-body">
@@ -118,6 +118,11 @@ const initialize = () => {
     nameSelectOptions: [],
     allFormValues: {},
     enabledPlugins: getEnabledPluginNames(),
+    closeComponent: function (){
+      this.componentIsActive = false;
+      console.log(this.componentIsActive)
+      emitCustomEvent('geonodeCustomLayerFilterClosed', {});
+    },
     submitFilterForm: function(){
         const currentFormFilter = this.allFormValues[this.currentFormId];
         const activatedComponents = Alpine.store('pluginStatus').registeredPluginNames;

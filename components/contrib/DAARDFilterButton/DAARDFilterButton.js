@@ -31,15 +31,34 @@ const initialize = async (buttonDomOrder) => {
     Alpine.store('DAARDFilterButton', {
         componentIsActive: false,
         buttonDomOrder: buttonDomOrder,
+        closeComponent: function () {
+            console.log("catched")
+            this.componentIsActive = false;
+            Alpine.store('geonodeCustomLayerFilter').componentIsActive = false;
+
+        },
         openFilter: function() {
-            
+            this.componentIsActive = !this.componentIsActive;
+
             const layer = featureLayersGroup.getLayers().getArray()[1];
             const source = layer.getSource();
             source.mapName = layer.get('name');
             source.dataset = layer.get('dataset');
-            emitCustomEvent('filterPushed', {"instance": source})
+
+            if (this.componentIsActive){
+                emitCustomEvent('filterPushed', {"instance": source})
+            } else {
+                Alpine.store('geonodeCustomLayerFilter').componentIsActive = false;
+            }
+
         }
     });
+
+    
+    document.addEventListener('geonodeCustomLayerFilterClosed', function (event) {
+        console.debug('Custom event "geonodeCustomLayerFilterClosed" caught.');
+        Alpine.store('DAARDFilterButton').closeComponent();
+      });
 
     // [function name that creates the DOM Element, Element to check for presence}
     const domElementsToCreate = [
