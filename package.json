@@ -22,7 +22,7 @@
     "ol": "latest",
     "olcs": "^2.16.0",
     "proj4": "^2.9.2",
-    "simple-datatables": "^8.0.0",
+    "simple-datatables": "^9.0.0",
     "tippy.js": "^6.3.7",
     "web-worker": "^1.2.0"
   }
