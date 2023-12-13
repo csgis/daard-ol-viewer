@@ -72,6 +72,10 @@ const initialize = (buttonDomOrder) => {
 
     updateVisibleLayers() {
       this.visibleLayers = featureLayersGroup.getLayers().getArray().filter(layer => layer.getVisible());
+      if (this.visibleLayers.length == 1){
+        const firstLayer = this.visibleLayers[0]
+       this.toggleDetails(firstLayer);
+      }
     },
 
     getLegendUrl(layer) {
@@ -90,6 +94,7 @@ const initialize = (buttonDomOrder) => {
       }
     },
     toggleDetails(item) {
+      console.log(item)
       item.showDetails = !item.showDetails; // Toggle the visibility of the item
     }
   });
