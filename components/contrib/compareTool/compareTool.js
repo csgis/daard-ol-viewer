@@ -107,8 +107,8 @@ const createOffCanvasMarkup = () => {
 
                    <div  class="h-100 d-flex align-items-center justify-content-center">
                       <div class="row w-100" x-show="$store.compareTool.show_skull" x-transition>
-                        <div class="col-6" x-html="$store.compareTool.svgContent(disease.properties.svgid)"></div>
-                        <div class="col-6">
+                        <div class="col-sm-12 col-md-12" x-html="$store.compareTool.svgContent(disease.properties.svgid)"></div>
+                        <div class="col-sm-12 col-md-12">
                         <div class="legend col">
                             <div class="rect dark"></div> bone preservation &gt;75% <br>
                             <div class="rect grey"></div> bone preservation &lt;75% <br>
