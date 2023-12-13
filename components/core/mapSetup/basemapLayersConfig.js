@@ -11,14 +11,14 @@ const basemapLayers = [
     {
       "id": "osm-color",
       "url": "https://tile.openstreetmap.de/{z}/{x}/{y}.png",
-      "attribution": "&copy; <a href=\"https://carto.com/attributions\">german osm</a>",
+      "attribution": "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a>",
       "visible": false,
       "img": "/assets/img/basemaps/osm-color-de.jpeg"
     },
     {
       "id": "osm-france",
       "url": "https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
-      "attribution": "&copy; <a href=\"https://carto.com/attributions\">france osm</a>",
+      "attribution": "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a>",
       "visible": false,
       "img": "/assets/img/basemaps/osm-hot-fr.jpeg"
     }
