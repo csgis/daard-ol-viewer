@@ -77,7 +77,7 @@ const createFormDom = (id) => {
 
             <div x-show="$store.geonodeCustomLayerFilter.corsTestpassed">  
                 <div class="form-check form-switch mt-3">
-                <input class="form-check-input or_operator_selector" :id="$id('operator-input')" type="checkbox"  x-on:change="$store.geonodeCustomLayerFilter.updateallFormValues()">
+                <input class="form-check-input or_operator_selector" :id="$id('operator-input')" type="checkbox"  x-on:change="$store.geonodeCustomLayerFilter.updateallFormValues()" checked>
                 <label class="form-check-label" :for="$id('operator-input')">AND / OR</label>
                 </div>
 
