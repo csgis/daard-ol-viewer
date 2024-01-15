@@ -1,2 +1,0 @@
-import{m as t}from"./index-c135b929.js";const a=()=>{if(confirm("Are you sure you want to save this thing into the database?"))console.log("Thing was saved to the database.");else throw new Error("Something went badly wrong!")},n=async e=>{t.store("mapSourceWarning",{}),t.store("pluginStatus").increasePluginLoadingStatus()};export{a as askUser,n as initialize};
-//# sourceMappingURL=mapSourceWarning-b876bbd7.js.map
