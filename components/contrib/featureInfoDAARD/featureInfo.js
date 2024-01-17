@@ -137,7 +137,7 @@ const initialize = () => {
       "sex": "Sex",
       "age": "Age",
       "age_class": "Age class",
-      "age_freetext": "Age commennt",
+      "age_freetext": "Age comment",
       "adults": "Adults",
       "dating_method": "Dating method",
       "chronology": "Chronology",
