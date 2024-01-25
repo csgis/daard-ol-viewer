@@ -34,8 +34,6 @@ const emitCustomEvent = (name, detail) => {
         detail: detail
       });
       document.dispatchEvent(event);
-      console.log(event);
-      console.log("triggered");
 }
 
 /* Helper Function to wait for depending Markup. See: layerPanel */

@@ -103,7 +103,8 @@
       "path": "./components/core/layerStyle/layerStyle.js",
       "enabled": false,
       "buttonDomOrder": 2,
-      "dependsOn": "layerPanelContainer"
+      "dependsOn": "layerPanelContainer",
+      "createsParentDOM": true
     },
     {
       "name": "afterMarkupFinish",

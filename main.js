@@ -34,7 +34,7 @@ async function loadParentComponents() {
     try {
         const parentPromises = loadPlugins(map, view, true);
         await Promise.all(parentPromises);
-        console.log("Finished loading all parent components");
+        console.log("-- Finished loading all parent components");
         return parentPromises.length;
     } catch (error) {
         console.error('Error in loading parent components:', error);
@@ -46,7 +46,7 @@ async function loadChildComponents() {
     try {
         const childPromises = loadPlugins(map, view, false);
         await Promise.all(childPromises);
-        console.log("Finished loading all non-parent components");
+        console.log("-- Finished loading all non-parent components");
         return childPromises.length;
     } catch (error) {
         console.error('Error in loading non-parent components:', error);
@@ -55,8 +55,6 @@ async function loadChildComponents() {
 }
 
 async function handleMapLayerFinish(event) {
-    console.debug('Main.js received featureMaplayersFinished event');
-
     const parentCount = await loadParentComponents();
     const childCount = await loadChildComponents();
     const totalPlugins = parentCount + childCount;
@@ -93,7 +91,6 @@ function checkPluginLoadingCompletion(totalPlugins) {
         if (Alpine.store('pluginStatus').registeredPluginsCount === totalPlugins) {
             const allPluginsFinishedLoadingEvent = new Event('allPluginsFinishedLoading');
             document.dispatchEvent(allPluginsFinishedLoadingEvent);
-            console.debug(`${totalPlugins} plugins finished loading`);
             emitCustomEvent('hideLoading', {});
         }
     });

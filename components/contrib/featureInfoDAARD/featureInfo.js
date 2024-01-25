@@ -4,7 +4,6 @@ import { buildLink, renderMarkupAndSetPluginReady } from '../../core/helper.js'
 import { featureLayersGroup, map, view } from '../../core/mapSetup/mapSetup.js';
 
 import Alpine from 'alpinejs';
-import { addClickIndicator } from '../../core/clickIndicator/clickIndicator.js';
 import { decorateValue } from '../../core/contentDecorator/contentDecorator.js';
 import { emitCustomEvent } from '../../core/helper.js';
 import { generateColoredSvg } from './bonesSvgGenerator.js';
@@ -103,7 +102,8 @@ const initialize = () => {
       if (!this.filteredFeatures[this.currentFeatureIndex]) {
         return [];
       }
-    
+
+   
       const properties = this.filteredFeatures[this.currentFeatureIndex].properties;
     
       // Filter out blocked keys and empty values
@@ -139,18 +139,19 @@ const initialize = () => {
       "age_class": "Age class",
       "age_freetext": "Age comment",
       "adults": "Adults",
-      "dating_method": "Dating method",
       "chronology": "Chronology",
       "chronology_freetext": "Chronology comment",
+      "dating_method": "Dating method",
       "subadults": "Subadults",
       "c_no_o_bones": "Amount of bones",
       "c_technic": "Used Technic",
       "doi": "Doi",
+      "dna_analyses": "aDNA analyses",
       "dna_analyses_link": "DNA analyses",
       "storage_place": "Storage place",
-      "storage_place_freetext": "Storage place method",
+      "storage_place_freetext": "Storage place freetext",
       "archaeological_burial_type": "Archaeological burial type",
-      "archaeological_funery_context": "Archaeological funery context",
+      "archaeological_funery_context": "Archaeological funerary context",
       "archaeological_individualid": "Archaeological individual ID",
       "archaeological_tombid": "Archaeological tomb ID",
       "gaz_link": "iDAI.gazetteer link",
@@ -179,15 +180,41 @@ const initialize = () => {
       return ret;
     },
     decorateValue: function(value) {
-      const decoratedValue = decorateValue(value, ['appendEuroToNumber', 'createLinkForUrl', 'decodeUrl', 'replaceBullet']);
+      const decoratedValue = decorateValue(value, 
+        ['appendEuroToNumber', 
+        'createLinkForUrl', 
+        'decodeUrl', 
+        'replaceBullet', 
+        'harmonizeUnknown', 
+        'harmonizeTrueFalse', 
+        'harmonizeMonth',
+        'removeListIfOnlyOneLi'
+      ]);
       return decoratedValue;
     },
     isBlacklistedKey: function(key) {
-      let blockedKeys = ['c_b_t_bc_rel', 'svgid', 'c_bones', 'bone_relations']
+      let blockedKeys = [
+        'c_b_t_bc_rel', 
+        'svgid', 
+        'c_bones', 
+        'bone_relations', 
+        'age', 
+        'adults', 
+        'subadults',
+        'c_no_o_bones',
+        'published',
+        'gaz_link',
+        'gazid',
+        'uuid',
+        'fid',
+        'owner',
+        'is_approved'
+      ]
       let isNotBlocked = blockedKeys.includes(key)
       return isNotBlocked;
     },
     svgContent: function(value){
+
       let decoded = decodeURIComponent(value)
       let json_str = JSON.stringify(decoded);
       return generateColoredSvg(decoded);
@@ -351,13 +378,15 @@ const initialize = () => {
   ]
   renderMarkupAndSetPluginReady(domElementsToCreate)
 
-    // Catch the custom event and execute a function to update the legend
+    // Catch the custom event and execute
+    // TODO: Do we need this here?
     document.addEventListener('mapLayerHaveChanged', function (event) {
       console.debug('Custom event "mapLayerHaveChanged" caught.');
       Alpine.store('featureInfoStore').init();
     });
 
-    // Catch the custom event and execute a function to update the legend
+    // Catch the custom event and execute a function
+    // TODO: Do we need this here?
     document.addEventListener('mapLayerSelected', function (event) {
       console.debug('Custom event "mapLayerSelected" caught.');
       Alpine.store('featureInfoStore').selectedLayers = event.detail.layer;

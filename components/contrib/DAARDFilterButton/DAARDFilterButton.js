@@ -40,13 +40,18 @@ const initialize = async (buttonDomOrder) => {
         openFilter: function() {
             this.componentIsActive = !this.componentIsActive;
 
-            const layer = featureLayersGroup.getLayers().getArray()[1];
+            console.log("group is")
+            console.log(featureLayersGroup.getLayers())
+
+
+            const layer = featureLayersGroup.getLayers().getArray()[0];
             const source = layer.getSource();
             source.mapName = layer.get('name');
             source.dataset = layer.get('dataset');
 
             if (this.componentIsActive){
                 emitCustomEvent('filterPushed', {"instance": source})
+                console.log("source is", source.mapName,  source.dataset )
             } else {
                 Alpine.store('geonodeCustomLayerFilter').componentIsActive = false;
             }

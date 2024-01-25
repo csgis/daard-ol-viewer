@@ -50,14 +50,14 @@ const pluginsConfig = {
       "buttonDomOrder": false
     },
     {
-      "name": "geonodeCustomLayerFilter",
-      "component": () => import("./components/core/geonodeCustomLayerFilter/geonodeCustomLayerFilter.js"),
+      "name": "daardLayerFilter",
+      "component": () => import("./components/contrib/DAARDLayerFilter/daardLayerFilter.js"),
       "enabled": true,
       "buttonDomOrder": false
     },
     {
       "name": "attributeTable",
-      "component": () => import("./components/core/attributeTable/attributeTable.js"),
+      "component": () => import("./components/contrib/attributeTableDAARD/attributeTable.js"),
       "enabled": true,
       "buttonDomOrder": 3
     },

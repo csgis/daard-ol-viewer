@@ -45,7 +45,7 @@
             <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">maxFeatures</ows:Identifier>
             <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">maxFeatures</ows:Title>
             <wps:Data>
-              <wps:LiteralData>20</wps:LiteralData>
+              <wps:LiteralData>200</wps:LiteralData>
             </wps:Data>
           </wps:Input>
           <wps:Input>

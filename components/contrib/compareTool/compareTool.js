@@ -1,3 +1,5 @@
+import './CourierStd-normal.js';
+
 import Alpine from 'alpinejs';
 import autoTable from 'jspdf-autotable'
 import feather from 'feather-icons';
@@ -68,7 +70,7 @@ const createOffCanvasMarkup = () => {
                     </div>
 
                     <div class="card-body d-flex flex-column" x-show="$store.compareTool.items.disease_case.length > 0">
-                      <table class="table table-stripe" x-show="$store.compareTool.show_table" x-transition>
+                      <table class="table table-stripe" x-show="$store.compareTool.show_table" x-transition :data="disease.properties.svgid">
                           <tbody>
                             <tr style="display: none;">
                               <th>Name</th>
@@ -185,8 +187,6 @@ const update_compare_items_from_outside = (item_uuid) => {
   );
 }
 
-
-// Print PDF by use of jspdf
 const make_compare_pdf = () => {
   const date = new Date();
   let day = date.getDate();
@@ -194,6 +194,7 @@ const make_compare_pdf = () => {
   let year = date.getFullYear();
 
   var doc = new jsPDF();
+
   doc.setFontSize(14);
   doc.text(`Export: daard.dainst.org`, 14, 10);
   doc.text(`Date: ${day}.${month}.${year}`, 14, 16);
@@ -201,36 +202,112 @@ const make_compare_pdf = () => {
   doc.setFontSize(10);
   doc.text(`This PDF shows your current selection of DAARD diseases.`, 14, 25);
   doc.text(`Every disease case will start on a new page`, 14, 30);
-  doc.text(`Note: the skull image will not be printed.`, 14, 35);
+
   var src = document.getElementsByClassName("table-stripe");
 
-  for (let item of src) {
-    doc.addPage();
-    doc.autoTable({
-      html: item,
-      theme: "grid",
-      columnStyles: {
-        0: { cellWidth: 40 }
-      },
-      includeHiddenHtml: true,
-      styles: { cellPadding: 0.5, fontSize: 10, overflow: "linebreak" }
+  // Function to convert SVG string to DataURL via Canvas
+  const svgStringToDataURL = (svgString, callback) => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      const dataURL = canvas.toDataURL('image/png');
+      callback(dataURL, img); // Pass the image along with the dataURL
+    };
+
+    img.src = 'data:image/svg+xml,' + encodeURIComponent(svgString);
+  };
+
+  const processItem = (item, callback) => {
+    let svg_ids = item.getAttribute('data');
+    let decoded_svg = decodeURIComponent(svg_ids)
+    console.log(decoded_svg)
+    let svgString = generateColoredSvg(decoded_svg);
+
+    svgStringToDataURL(svgString, (dataURL, img) => {
+      doc.addPage();
+
+      // Add table
+      doc.autoTable({
+        html: item,
+        theme: "grid",
+        columnStyles: {
+          0: { cellWidth: 40 }
+        },
+        includeHiddenHtml: true,
+        styles: { cellPadding: 0.5, fontSize: 10, overflow: "linebreak", font: 'CourierStd' }
+      });
+
+      // Get Y-coordinate just below the last row of the table
+      let finalY = doc.autoTable.previous.finalY || 40; // Default to 40 if undefined
+
+      // Add the SVG image (now a PNG) below the table
+      const imageWidth = 4 * 28.35; // 4 cm in points
+      doc.addImage(dataURL, 'PNG', 15, finalY + 10, imageWidth, imageWidth * (img.height / img.width));
+
+      // Coordinates for the legend
+      let legendY = finalY + 10 + imageWidth * (img.height / img.width) + 10; // 10 points below the image
+
+      // Function to add a colored rectangle
+      const addLegendRect = (color, x, y, width, height) => {
+        doc.setFillColor(color);
+        doc.setDrawColor("#000000");
+        doc.rect(x, y, width, height, 'FD');
+      };
+
+      // Size and position for the legend rectangles
+      const rectWidth = 3;
+      const rectHeight = 3;
+      const rectX = 15;
+      const textX = rectX + rectWidth + 3;
+
+      // Add legend items
+      addLegendRect('#484848', rectX, legendY, rectWidth, rectHeight); // Replace 'darkcolor' with actual color
+      doc.text('bone preservation >75%', textX, legendY + rectHeight);
+
+      legendY += 4; // Adjust Y for next item
+      addLegendRect('#A8A8A8', rectX, legendY, rectWidth, rectHeight); // Replace 'greycolor' with actual color
+      doc.text('bone preservation <75%', textX, legendY + rectHeight);
+
+      legendY += 4;
+      addLegendRect('#fd5c63', rectX, legendY, rectWidth, rectHeight); // Replace 'palecolor' with actual color
+      doc.text('affected', textX, legendY + rectHeight);
+
+      legendY += 4;
+      addLegendRect('#ffffff', rectX, legendY, rectWidth, rectHeight);
+      doc.text('unknown / absent', textX, legendY + rectHeight);
+
+      callback();
     });
-  }
+  };
 
-  var pageCount = doc.internal.getNumberOfPages(); //Total Page Number
-  for (let i = 0; i < pageCount; i++) {
-    doc.setPage(i);
-    let pageCurrent = doc.internal.getCurrentPageInfo().pageNumber; //Current Page
-    doc.setFontSize(10);
-    doc.text(
-      "page: " + pageCurrent + "/" + pageCount,
-      10,
-      doc.internal.pageSize.height - 10
-    );
-  }
+  // Process each item and then save the PDF
+  const processItemsSequentially = (items, index = 0) => {
+    if (index < items.length) {
+      processItem(items[index], () => processItemsSequentially(items, index + 1));
+    } else {
+      var pageCount = doc.internal.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        let pageCurrent = doc.internal.getCurrentPageInfo().pageNumber;
+        doc.setFontSize(10);
+        doc.text(
+          "page: " + pageCurrent + "/" + pageCount,
+          10,
+          doc.internal.pageSize.height - 10
+        );
+      }
 
-  doc.save(`DAARD_export_${day}-${month}-${year}`);
-}
+      doc.save(`DAARD_export_${day}-${month}-${year}`);
+    }
+  };
+
+  processItemsSequentially(Array.from(src));
+};
 
 
 // create a plugin store by use of alpinejs – name the store like the folder of your plugin
@@ -276,7 +353,8 @@ const initialize = (map, view) => {
     },
     search_result(){
       var result = this.items.disease_case.filter(obj => {
-        return obj.properties.disease.toLowerCase().includes(this.search.toLowerCase())
+        let itemFound = obj.properties.disease.toLowerCase().includes(this.search.toLowerCase()) || obj.properties.site.toLowerCase().includes(this.search.toLowerCase())
+        return itemFound
         })
 
       return result

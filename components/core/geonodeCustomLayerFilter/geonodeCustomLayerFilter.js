@@ -75,6 +75,10 @@ const createFormDom = (id) => {
 
           <p class="alert alert-warning mt-5" x-cloak role="alert" x-text="$store.geonodeCustomLayerFilter.corsInformation" x-show="!$store.geonodeCustomLayerFilter.corsTestpassed"></p>
 
+          <template x-if="$store.geonodeCustomLayerFilter.getLayersOnMap() !== '0 items shown'">
+            <div class="my-3"  x-text="$store.geonodeCustomLayerFilter.getLayersOnMap()"></div>
+          </template>
+
             <div x-show="$store.geonodeCustomLayerFilter.corsTestpassed">  
                 <div class="form-check form-switch mt-3">
                 <input class="form-check-input or_operator_selector" :id="$id('operator-input')" type="checkbox"  x-on:change="$store.geonodeCustomLayerFilter.updateallFormValues()" checked>
@@ -117,6 +121,7 @@ const initialize = () => {
     corsInformation: "",
     nameSelectOptions: [],
     allFormValues: {},
+    layerFeaturesOnMap: {"Daard Database": 0},
     enabledPlugins: getEnabledPluginNames(),
     closeComponent: function (){
       this.componentIsActive = false;
@@ -127,10 +132,11 @@ const initialize = () => {
         const currentFormFilter = this.allFormValues[this.currentFormId];
         const activatedComponents = Alpine.store('pluginStatus').registeredPluginNames;
         this.layer.updateParams({ 'CQL_FILTER': currentFormFilter });
-
+        
         if (this.enabledPlugins.includes('layerPanel')){
           Alpine.store('layerPanel').activeFilters.push(this.currentLayerName);
         }
+        emitCustomEvent('geonodeCustomLayerFilterUpdated', {});
     },
     clearFilterForm: function(){
         this.allFormValues[this.currentFormId] = "";
@@ -150,6 +156,8 @@ const initialize = () => {
           });
         }
 
+        emitCustomEvent('geonodeCustomLayerFilterUpdated', {});
+
 
     },
     hasActiveFilters: function(){
@@ -162,6 +170,10 @@ const initialize = () => {
     },
     visibleAttributes: function() {
        return this.nameSelectOptions.filter(option => option.visible).map(option => option.attribute);
+    },
+    getLayersOnMap: function() {
+      let currentLayerAmount = this.layerFeaturesOnMap[this.currentLayerName]
+      return `${currentLayerAmount} items shown`
     },
     updateaOnNameSelect: function(target) {
      const filterName = target.value;

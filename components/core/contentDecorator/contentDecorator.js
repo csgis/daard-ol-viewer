@@ -2,6 +2,10 @@ import appendEuroToNumber from './decorators/appendEuroToNumber';
 import createLinkForUrl from './decorators/createLinkForUrl';
 import decodeUrl from './decorators/decodeUrl.js'
 import formatImageTag from './decorators/formatImageTag';
+import harmonizeMonth from './decorators/harmonizeMonth.js';
+import harmonizeTrueFalse from './decorators/harmonizeTrueFalse.js';
+import harmonizeUnknown from './decorators/harmonizeUnknown.js';
+import removeListIfOnlyOneLi from './decorators/removeListIfOnlyOneLi'
 import replaceBullet from './decorators/replaceBullet';
 
 const decorators = {
@@ -9,7 +13,11 @@ const decorators = {
     createLinkForUrl,
     formatImageTag,
     decodeUrl,
-    replaceBullet
+    replaceBullet,
+    harmonizeUnknown,
+    harmonizeTrueFalse,
+    harmonizeMonth,
+    removeListIfOnlyOneLi
 };
 
 const decorateValue = (value, usedDecorators = []) => {

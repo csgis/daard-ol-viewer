@@ -21,7 +21,6 @@ const loadPlugins = (map, view, parentsOnly = false) => {
     }
   }
 
-  console.log('Initialization promises:', initializationPromises);
   return initializationPromises; 
 };
 
