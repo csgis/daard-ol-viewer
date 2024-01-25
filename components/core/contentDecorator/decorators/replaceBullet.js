@@ -1,5 +1,5 @@
-const createLinkForUrl = (value) => {
+const replaceBullet = (value) => {
     return value.replaceAll('●', '<br>')
 };
 
-export default createLinkForUrl;
+export default replaceBullet;

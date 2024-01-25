@@ -356,6 +356,11 @@ const initialize = () => {
     setFirstPage: function() {
       this.currentPage = 1;
     },
+
+    setLastPage: function() {
+      this.currentPage = this.totalPages();
+    },
+  
   
     setPage: function(page) {
       this.currentPage = page;

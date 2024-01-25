@@ -345,7 +345,6 @@ const initialize = () => {
       'gaz_link',
       'gazid',
       'uuid',
-      'fid',
       'owner',
       'is_approved'
     ],
@@ -426,6 +425,7 @@ const initialize = () => {
       const range = 2; // Number of pages to display around the current page
       const start = Math.max(1, this.currentPage - range);
       const end = Math.min(this.totalPages(), this.currentPage + range);
+    
       let pages = [];
   
       for (let i = start; i <= end; i++) {
@@ -438,6 +438,11 @@ const initialize = () => {
     setFirstPage: function() {
       this.currentPage = 1;
     },
+
+    setLastPage: function() {
+      this.currentPage = this.totalPages();
+    },
+  
   
     setPage: function(page) {
       this.currentPage = page;

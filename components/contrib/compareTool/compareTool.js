@@ -330,7 +330,6 @@ const initialize = (map, view) => {
         ['appendEuroToNumber', 
         'createLinkForUrl', 
         'decodeUrl', 
-        'replaceBullet', 
         'harmonizeUnknown', 
         'harmonizeTrueFalse', 
         'harmonizeMonth',
