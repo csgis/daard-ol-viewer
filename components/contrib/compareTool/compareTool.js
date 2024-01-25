@@ -2,6 +2,7 @@ import './CourierStd-normal.js';
 
 import Alpine from 'alpinejs';
 import autoTable from 'jspdf-autotable'
+import { decorateValue } from '../../core/contentDecorator/contentDecorator.js';
 import feather from 'feather-icons';
 import { generateColoredSvg } from '../featureInfoDAARD/bonesSvgGenerator.js';
 import jsPDF from 'jspdf'
@@ -74,35 +75,35 @@ const createOffCanvasMarkup = () => {
                           <tbody>
                             <tr style="display: none;">
                               <th>Name</th>
-                              <th x-text="disease.properties.disease || '-'"></th>
+                              <th><b x-text="$store.compareTool.decorateValue(disease.properties.disease) || '-'"></b></th>
                             </tr>
                             <tr>
                               <td style="width:180px">Sex</td>
-                              <td x-text="disease.properties.sex || '-'"></td>
+                              <td x-text="$store.compareTool.decorateValue(disease.properties.sex) || '-'"></td>
                             </tr>
                             <tr>
                               <td>Age class</td>
-                              <td x-text="disease.properties.age_class || '-'"></td>
+                              <td x-text="$store.compareTool.decorateValue(disease.properties.age_class) || '-'"></td>
                             </tr>
                             <tr>
                               <td>Narrower age</td>
-                              <td x-text="disease.properties.age_freetext || '-'"></td>
+                              <td x-text="$store.compareTool.decorateValue(disease.properties.age_freetext) || '-'"></td>
                             </tr>
                             <tr>
                               <td>Site</td>
-                              <td x-text="disease.properties.site || '-'"></td>
+                              <td x-text="$store.compareTool.decorateValue(disease.properties.site) || '-'"></td>
                             </tr>
                             <tr>
                               <td>Storage place</td>
-                              <td x-text="disease.properties.storage_place || '-'"></td>
+                              <td x-text="$store.compareTool.decorateValue(disease.properties.storage_place) || '-'"></td>
                             </tr>
                             <tr>
                               <td>Time period</td>
-                              <td x-text="disease.properties.chronology || '-'"></td>
+                              <td x-text="$store.compareTool.decorateValue(disease.properties.chronology) || '-'"></td>
                             </tr>
                             <tr>
                               <td>Narrower time period</td>
-                              <td x-text="disease.properties.chronology_freetext || '-'"></td>
+                              <td x-text="$store.compareTool.decorateValue(disease.properties.chronology_freetext) || '-'"></td>
                             </tr>
                           </tbody>
                         </table>
@@ -239,7 +240,7 @@ const make_compare_pdf = () => {
           0: { cellWidth: 40 }
         },
         includeHiddenHtml: true,
-        styles: { cellPadding: 0.5, fontSize: 10, overflow: "linebreak", font: 'CourierStd' }
+        styles: { cellPadding: 1, fontSize: 10, overflow: "linebreak", font: 'CourierStd' }
       });
 
       // Get Y-coordinate just below the last row of the table
@@ -325,6 +326,18 @@ const initialize = (map, view) => {
       let decoded = decodeURIComponent(value)
       let json_str = JSON.stringify(decoded);
       return generateColoredSvg(decoded);
+    },
+    decorateValue: function(value) {
+      const decoratedValue = decorateValue(value, 
+        ['appendEuroToNumber', 
+        'createLinkForUrl', 
+        'decodeUrl', 
+        'replaceBullet', 
+        'harmonizeUnknown', 
+        'harmonizeTrueFalse', 
+        'harmonizeMonth',
+      ]);
+      return decoratedValue;
     },
     openCanvas(){
       this.componentIsActive = !this.componentIsActive ;
