@@ -33,7 +33,7 @@ const createOffCanvasMarkup = () => {
                         <select class="form-select form-select-sm name" x-on:change="$store.geonodeCustomLayerFilter.updateaOnNameSelect($event.target)">
                             <option value="-" x-text="'select'" class="text-secondary"></option>
                             <template x-for="option in $store.geonodeCustomLayerFilter.visibleAttributes()">
-                                <option :value="option" x-text="option"></option>
+                                <option :value="option" x-text="$store.geonodeCustomLayerFilter.getKeyTranslation(option)"></option>
                             </template>
                         </select>
                     </div>
@@ -151,6 +151,42 @@ const initialize = () => {
       ]
       let isNotBlocked = blockedKeys.includes(key)
       return isNotBlocked;
+    },
+    keyTranslations: {
+      "disease": "Disease",
+      "sex": "Sex",
+      "age": "Age",
+      "age_class": "Age class",
+      "age_freetext": "Age comment",
+      "adults": "Adults",
+      "chronology": "Chronology",
+      "chronology_freetext": "Chronology comment",
+      "dating_method": "Dating method",
+      "subadults": "Subadults",
+      "c_no_o_bones": "Amount of bones",
+      "c_technic": "Used Technic",
+      "doi": "Doi",
+      "dna_analyses": "aDNA analyses",
+      "dna_analyses_link": "DNA analyses",
+      "storage_place": "Storage place",
+      "storage_place_freetext": "Storage place freetext",
+      "archaeological_burial_type": "Archaeological burial type",
+      "archaeological_funery_context": "Archaeological funerary context",
+      "archaeological_individualid": "Archaeological individual ID",
+      "archaeological_tombid": "Archaeological tomb ID",
+      "gaz_link": "iDAI.gazetteer link",
+      "gazid": "iDAI.gazetteer ID",
+      "site": "Site",
+      "origin": "Origin",
+      "reference_images": "Reference images",
+      "references": "References",
+      "uuid": "UUID",
+      "owner": "Owner",
+      "fid": "Datbase ID"
+    },
+    getKeyTranslation: function(value){
+      const translatedKey = this.keyTranslations[value] || value;
+      return translatedKey
     },
     closeComponent: function (){
       this.componentIsActive = false;
