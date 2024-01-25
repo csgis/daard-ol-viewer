@@ -88,17 +88,17 @@ const createFormDom = (id) => {
                 <div x-data>
                     <button x-data
                     class="btn btn-secondary btn-sm mt-3 addItem"
-                    @click="$store.geonodeCustomLayerFilter.addItem('${id}')">add filter</button>
+                    @click="$store.geonodeCustomLayerFilter.addItem('${id}')">Add filter</button>
 
                     <button x-data
-                        class="btn btn-secondary btn-sm mt-3 submitFilter"
+                        class="btn btn-success btn-sm mt-3 submitFilter"
                         @click="$store.geonodeCustomLayerFilter.submitFilterForm()"
-                        :disabled="$store.geonodeCustomLayerFilter.hasActiveFilters()">filter layer</button>
+                        :disabled="$store.geonodeCustomLayerFilter.hasActiveFilters()">Submit filter</button>
 
                 <button x-data
-                    class="btn btn-secondary btn-sm mt-3 submitFilter"
+                    class="btn btn-danger btn-sm mt-3 submitFilter"
                     @click="$store.geonodeCustomLayerFilter.clearFilterForm()" 
-                    :disabled="$store.geonodeCustomLayerFilter.hasActiveFilters()">clear filter</button>
+                    :disabled="$store.geonodeCustomLayerFilter.hasActiveFilters()">Clear all</button>
 
                 </div>
             </div>

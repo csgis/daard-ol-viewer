@@ -59,8 +59,19 @@ ul.datatable-pagination-list {
 .datatable-pagination .datatable-active a, .datatable-pagination .datatable-active a:focus, .datatable-pagination .datatable-active a:hover, .datatable-pagination .datatable-active button, .datatable-pagination .datatable-active button:focus, .datatable-pagination .datatable-active button:hover {
   background-color: #fff;
   cursor: default;
-  color: blue;
+  color: #4069A8;
   font-weight: bold;
+}
+
+.active>.page-link, .page-link.active {
+  color:white!important;
+  z-index: 3;
+  background-color: #4069A8!important;
+  border-color: #4069A8!important;
+}
+
+.page-link {
+  color: #4069A8!important;
 }
 
 .btn-circle {
