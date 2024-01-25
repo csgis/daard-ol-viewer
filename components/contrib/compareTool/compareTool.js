@@ -314,8 +314,6 @@ const make_compare_pdf = () => {
 // create a plugin store by use of alpinejs – name the store like the folder of your plugin
 const initialize = (map, view) => {
 
-
-
   Alpine.store('compareTool', {
     componentIsActive: false,
     items: Alpine.$persist({ disease_case: []}),
