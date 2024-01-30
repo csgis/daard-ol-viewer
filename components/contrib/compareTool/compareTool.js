@@ -31,7 +31,7 @@ const createOffCanvasMarkup = () => {
                   <span class="slider round"></span>
                 </label><span class="ms-2 daard-filter_label">show skeleton</span>
             
-                  <input type="text" class="daard-search border-dark border-1 mb-3 border rounded-pill" placeholder="filter by name" x-model="$store.compareTool.search">
+                  <input type="text" class="daard-search border-dark border-1 mb-3 border rounded-pill" placeholder="filter by fields" x-model="$store.compareTool.search">
 
 
                   
@@ -363,7 +363,13 @@ const initialize = (map, view) => {
     },
     search_result(){
       var result = this.items.disease_case.filter(obj => {
-        let itemFound = obj.properties.disease.toLowerCase().includes(this.search.toLowerCase()) || obj.properties.site.toLowerCase().includes(this.search.toLowerCase())
+        let itemFound = obj.properties.disease.toLowerCase().includes(this.search.toLowerCase()) 
+        || obj.properties.site.toLowerCase().includes(this.search.toLowerCase())
+        || obj.properties.storage_place.toLowerCase().includes(this.search.toLowerCase())
+        || obj.properties.chronology.toLowerCase().includes(this.search.toLowerCase())
+        || obj.properties.chronology_freetext.toLowerCase().includes(this.search.toLowerCase())
+        || obj.properties.age_class.toLowerCase().includes(this.search.toLowerCase()) 
+        || obj.properties.sex.toLowerCase().includes(this.search.toLowerCase())
         return itemFound
         })
 
@@ -373,6 +379,7 @@ const initialize = (map, view) => {
       make_compare_pdf();
     }
   });
+
 
 
   // Catch WFS request

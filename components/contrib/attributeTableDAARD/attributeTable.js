@@ -329,7 +329,7 @@ const initialize = () => {
     currentPage: 1,
     fetchSuccessful: false,
     decorateValue: function(value) {
-      const decoratedValue = decorateValue(value, ['createLinkForUrl', 'decodeUrl']);
+      const decoratedValue = decorateValue(value, ['createLinkForUrl', 'decodeUrl', 'harmonizeUnknown', 'replaceBulletwithComma']);
       return decoratedValue;
     },
     blockedKeys: [
@@ -442,7 +442,6 @@ const initialize = () => {
     setLastPage: function() {
       this.currentPage = this.totalPages();
     },
-  
   
     setPage: function(page) {
       this.currentPage = page;

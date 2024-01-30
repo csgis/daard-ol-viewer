@@ -127,10 +127,18 @@ const initialize = () => {
         }
       });
     
+    // Remove 'storage_place' if 'storage_place_freetext' exists and is not empty
+    const storagePlaceFreeTextIndex = sortedPropertiesArray.findIndex(([key,]) => key === "storage_place_freetext");
+    if (storagePlaceFreeTextIndex !== -1 && sortedPropertiesArray[storagePlaceFreeTextIndex][1]) {
+      const storagePlaceIndex = sortedPropertiesArray.findIndex(([key,]) => key === "storage_place");
+      if (storagePlaceIndex !== -1) {
+        sortedPropertiesArray.splice(storagePlaceIndex, 1);
+      }
+    }
+
       console.log("sorted and filtered properties", sortedPropertiesArray);
       return sortedPropertiesArray;
     },
-    
     
     keyTranslations: {
       "disease": "Disease",

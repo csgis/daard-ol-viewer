@@ -7,6 +7,7 @@ import harmonizeTrueFalse from './decorators/harmonizeTrueFalse.js';
 import harmonizeUnknown from './decorators/harmonizeUnknown.js';
 import removeListIfOnlyOneLi from './decorators/removeListIfOnlyOneLi'
 import replaceBullet from './decorators/replaceBullet';
+import replaceBulletwithComma from './decorators/replaceBulletwithComma';
 
 const decorators = {
     appendEuroToNumber,
@@ -17,7 +18,8 @@ const decorators = {
     harmonizeUnknown,
     harmonizeTrueFalse,
     harmonizeMonth,
-    removeListIfOnlyOneLi
+    removeListIfOnlyOneLi,
+    replaceBulletwithComma
 };
 
 const decorateValue = (value, usedDecorators = []) => {
