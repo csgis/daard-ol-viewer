@@ -369,6 +369,7 @@ const initialize = (map, view) => {
         || obj.properties.chronology.toLowerCase().includes(this.search.toLowerCase())
         || obj.properties.chronology_freetext.toLowerCase().includes(this.search.toLowerCase())
         || obj.properties.age_class.toLowerCase().includes(this.search.toLowerCase()) 
+        || obj.properties.age_freetext.toLowerCase().includes(this.search.toLowerCase()) 
         || obj.properties.sex.toLowerCase().includes(this.search.toLowerCase())
         return itemFound
         })
