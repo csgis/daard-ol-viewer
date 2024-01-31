@@ -344,10 +344,8 @@ const initialize = () => {
       'published',
       'gaz_link',
       'gazid',
-      'uuid',
       'owner',
       'is_approved',
-      'fid',
       'text'
     ],
     keyTranslations: {
@@ -387,8 +385,9 @@ const initialize = () => {
       "uuid": "UUID",
       "owner": "Owner",
       "fid": "Datbase ID",
-      "comment": "Comment"
-
+      "comment": "Comment",
+      "fid": "File ID",
+      "uid": "UUID"
     },
     getKeyTranslation: function(value){
       const translatedKey = this.keyTranslations[value] || value;
