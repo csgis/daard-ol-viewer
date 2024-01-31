@@ -143,12 +143,17 @@ const initialize = () => {
     keyTranslations: {
       "disease": "Disease",
       "sex": "Sex",
+      "sex_freetext": "Methods for sex determination",
       "age": "Age",
+      "age_estimation_method": "Methods for age estimation",
       "age_class": "Age class",
       "age_freetext": "Age comment",
       "adults": "Adults",
-      "chronology": "Chronology",
-      "chronology_freetext": "Chronology comment",
+      "size_from": "Body height from (cm)",
+      "size_to": "Body height to (cm)",
+      "size_freetext": "Methods for body height calculation",
+      "chronology": "Time period",
+      "chronology_freetext": "Time period comment",
       "dating_method": "Dating method",
       "subadults": "Subadults",
       "c_no_o_bones": "Amount of bones",
@@ -170,7 +175,8 @@ const initialize = () => {
       "references": "References",
       "uuid": "UUID",
       "owner": "Owner",
-      "fid": "Datbase ID"
+      "fid": "Datbase ID",
+      "comment": "Comment"
     },
     getKeyTranslation: function(value){
       const translatedKey = this.keyTranslations[value] || value;
