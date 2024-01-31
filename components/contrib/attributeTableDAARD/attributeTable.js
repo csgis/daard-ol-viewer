@@ -139,7 +139,7 @@ const createMarkup = () => {
                     <thead>
                         <tr>
                           <th>
-                            <span class="attributTable_col" x-text="'zoom to'"></span>
+                            <span class="attributTable_col" x-text="''"></span>
                           </th>
                           <template x-if="$store.attributeTable.features.length > 0">
                             <template x-for="key in Object.keys($store.attributeTable.features[0].properties)" :key="key">
@@ -329,7 +329,7 @@ const initialize = () => {
     currentPage: 1,
     fetchSuccessful: false,
     decorateValue: function(value) {
-      const decoratedValue = decorateValue(value, ['createLinkForUrl', 'decodeUrl', 'harmonizeUnknown', 'replaceBulletwithComma']);
+      const decoratedValue = decorateValue(value, ['createLinkForUrl', 'decodeUrl', 'harmonizeUnknown', 'replaceBulletwithComma', 'replaceUndefined']);
       return decoratedValue;
     },
     blockedKeys: [
@@ -346,7 +346,9 @@ const initialize = () => {
       'gazid',
       'uuid',
       'owner',
-      'is_approved'
+      'is_approved',
+      'fid',
+      'text'
     ],
     keyTranslations: {
       "disease": "Disease",
@@ -367,6 +369,7 @@ const initialize = () => {
       "c_no_o_bones": "Amount of bones",
       "c_technic": "Used Technic",
       "doi": "Doi",
+      "differential_diagnosis": "Differential Diagnosis",
       "dna_analyses": "aDNA analyses",
       "dna_analyses_link": "DNA analyses",
       "storage_place": "Storage place",

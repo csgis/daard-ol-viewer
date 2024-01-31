@@ -54,7 +54,7 @@ const createFeatureInfoOffCanvasMarkup = () => {
 
             <template x-for="[key, value] in $store.featureInfoStore.getFilteredFeatures()" :key="key">
               <template x-if="$store.featureInfoStore.filteredFeatures">
-                    <tr>
+                    <tr :class="key">
                       <td><strong x-text="$store.featureInfoStore.getKeyTranslation(key)"></strong></td>
                       <td><span x-html="$store.featureInfoStore.decorateValue(value)"></span></td>
                     </tr>
@@ -219,7 +219,6 @@ const initialize = () => {
         'published',
         'gaz_link',
         'gazid',
-        'uuid',
         'fid',
         'owner',
         'is_approved'
