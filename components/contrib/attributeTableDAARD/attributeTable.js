@@ -355,7 +355,7 @@ const initialize = () => {
       "age": "Age",
       "age_class": "Age class",
       "age_estimation_method": "Methods for age estimation",
-      "age_freetext": "Age comment",
+      "age_freetext": "Estimated age",
       "adults": "Adults",
       "size_from": "Body height from (cm)",
       "size_to": "Body height to (cm)",
