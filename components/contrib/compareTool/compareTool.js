@@ -66,7 +66,7 @@ const createOffCanvasMarkup = () => {
                 <div class="col-lg-4 mb-3 align-items-stretch d-flex">
                   <div class="card w-100">
                     <div class="card-header d-flex justify-content-between align-items-center bg-white" style="font-size: 1rem">
-                      <span x-text="disease.properties.disease" style="font-size: 0.8rem; font-weight: bold"></span>
+                      <span x-text="index+1 +'. '+ disease.properties.disease" style="font-size: 0.8rem; font-weight: bold"></span>
                       <button type="button" class="btn-close text-reset" @click="$store.compareTool.delete_item_from_disease_case(disease.properties.uuid);"></button>
                     </div>
 
