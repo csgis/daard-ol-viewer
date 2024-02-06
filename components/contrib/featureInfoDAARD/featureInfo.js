@@ -173,10 +173,11 @@ const initialize = () => {
       "origin": "Origin",
       "reference_images": "Reference images",
       "references": "References",
+      "comment": "Comment",
+      "c_b_t_bc_rel": "Inventory",
       "uuid": "UUID",
       "owner": "Owner",
       "fid": "Datbase ID",
-      "comment": "Comment"
     },
     getKeyTranslation: function(value){
       const translatedKey = this.keyTranslations[value] || value;
@@ -202,13 +203,13 @@ const initialize = () => {
         'harmonizeUnknown', 
         'harmonizeTrueFalse', 
         'harmonizeMonth',
-        'removeListIfOnlyOneLi'
+        'removeListIfOnlyOneLi',
+        'toggleLongText'
       ]);
       return decoratedValue;
     },
     isBlacklistedKey: function(key) {
       let blockedKeys = [
-        'c_b_t_bc_rel', 
         'svgid', 
         'c_bones', 
         'bone_relations', 

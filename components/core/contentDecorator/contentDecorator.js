@@ -9,6 +9,7 @@ import removeListIfOnlyOneLi from './decorators/removeListIfOnlyOneLi'
 import replaceBullet from './decorators/replaceBullet';
 import replaceBulletwithComma from './decorators/replaceBulletwithComma';
 import replaceUndefined from './decorators/replaceUndefined';
+import toggleLongText from './decorators/toggleLongText';
 
 const decorators = {
     appendEuroToNumber,
@@ -21,7 +22,8 @@ const decorators = {
     harmonizeMonth,
     removeListIfOnlyOneLi,
     replaceBulletwithComma,
-    replaceUndefined
+    replaceUndefined,
+    toggleLongText
 };
 
 const decorateValue = (value, usedDecorators = []) => {
