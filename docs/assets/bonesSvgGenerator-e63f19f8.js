@@ -1,4 +1,4 @@
-const svgContent = `
+const p=`
 <svg width="245px" height="627px" viewBox="0 0 245 627" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="daard-skull" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
     <g id="all" transform="translate(3.000000, 5.000000)" fill-rule="nonzero">
@@ -415,62 +415,5 @@ const svgContent = `
     <rect id="rect7702" fill-opacity="0" fill="#000000" fill-rule="nonzero" x="181.901542" y="37" width="1" height="2"></rect>
 </g>
 </svg>
-`;
-
-// File: bonesSvgGenerator.js
-const generateColoredSvg = (bones) => {
-    const colorKeys = {
-        ">75%": "#484848",
-        "<75%": "#A8A8A8",
-        "affected": "#fd5c63",
-        "unknown": "#ffffff"
-    };
-
-    // Parse the SVG string into a DOM object
-    const parser = new DOMParser();
-    const svgDom = parser.parseFromString(svgContent, "image/svg+xml");
-
-    // // Function to set the color of a bone
-    // const setColor = (elementId, color) => {
-    //     const boneElement = svgDom.getElementById(elementId);
-    //     if (boneElement) {
-    //         boneElement.style.fill = color;
-    //     }
-    // };
-
-    // Function to set the color of a bone
-    const setColor = (elementId, color) => {
-        const selected_bones = svgDom.querySelectorAll('[id="' + elementId + '"]');
-        selected_bones.forEach(selected_bone => {
-            if (selected_bone){
-                selected_bone.style.fill = color;
-            }
-        });
-
-    };
-
-    const highlightSingleBones = (bonesJson) => {
-        // Parse the JSON string into a JavaScript object
-        const bones = JSON.parse(bonesJson);
-        for (let key in bones) {
-            for (let element of bones[key]) {
-                setColor('bone' + element, colorKeys[key]);
-            }
-        }
-    };
-    
-
-    if (bones) {
-        highlightSingleBones(bones);
-    }
-
-    // Serialize the SVG DOM back to a string
-    const serializer = new XMLSerializer();
-    const newSvgContent = serializer.serializeToString(svgDom.documentElement);
-
-    return newSvgContent;
-  
-};
-
-export { generateColoredSvg };
-  
+`,n=i=>{const a={">75%":"#484848","<75%":"#A8A8A8",affected:"#fd5c63",unknown:"#ffffff"},h=new DOMParser().parseFromString(p,"image/svg+xml"),d=(t,C)=>{h.querySelectorAll('[id="'+t+'"]').forEach(F=>{F&&(F.style.fill=C)})};return i&&(t=>{const C=JSON.parse(t);for(let l in C)for(let F of C[l])d("bone"+F,a[l])})(i),new XMLSerializer().serializeToString(h.documentElement)};export{n as g};
+//# sourceMappingURL=bonesSvgGenerator-e63f19f8.js.map

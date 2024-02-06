@@ -213,6 +213,7 @@ const make_compare_pdf = () => {
     const img = new Image();
 
     img.onload = () => {
+      console.log(img.width, img.height);
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
@@ -247,7 +248,7 @@ const make_compare_pdf = () => {
       let finalY = doc.autoTable.previous.finalY || 40; // Default to 40 if undefined
 
       // Add the SVG image (now a PNG) below the table
-      const imageWidth = 4 * 28.35; // 4 cm in points
+      const imageWidth = 1.5 * 28.35; // 4 cm in points
       doc.addImage(dataURL, 'PNG', 15, finalY + 10, imageWidth, imageWidth * (img.height / img.width));
 
       // Coordinates for the legend
