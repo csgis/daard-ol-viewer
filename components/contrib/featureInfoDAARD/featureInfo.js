@@ -56,7 +56,7 @@ const createFeatureInfoOffCanvasMarkup = () => {
               <template x-if="$store.featureInfoStore.filteredFeatures">
                     <tr :class="key">
                       <td><strong x-text="$store.featureInfoStore.getKeyTranslation(key)"></strong></td>
-                      <td><span x-html="$store.featureInfoStore.decorateValue(value)"></span></td>
+                      <td><div x-html="$store.featureInfoStore.decorateValue(value)"></div></td>
                     </tr>
               </template>
             </template>
@@ -157,7 +157,7 @@ const initialize = () => {
       "dating_method": "Dating method",
       "subadults": "Subadults",
       "c_no_o_bones": "Amount of bones",
-      "c_technic": "Used Technic",
+      "c_technic": "Used technique",
       "doi": "Doi",
       "dna_analyses": "aDNA analyses",
       "dna_analyses_link": "DNA analyses",

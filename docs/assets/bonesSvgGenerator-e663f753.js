@@ -1,4 +1,4 @@
-const svgContent = `
+const i=`
 <svg width="291px" height="634px" viewBox="0 0 291 634" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="cv" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
     <path d="M82.44,626.162 C82.01,625.649 80.798,625.327 82.016,624.404 C82.056,624.374 81.948,624.136 81.897,624 C81.406,622.701 81.443,621.5 82.238,620.46 C82.279,619.759 82.144,618.985 82.399,618.375 C82.869,617.249 82.926,616.182 82.73,614.996 C82.617,614.32 82.897,613.579 83.174,612.976 C82.923,612.378 82.462,611.782 82.459,611.182 C82.451,609.432 82.599,607.679 82.733,605.931 C82.955,603.044 82.766,600.196 82.1,597.374 C81.974,596.84 81.91,596.261 81.973,595.72 C82.086,594.746 83.17,593.672 83.765,594.021 C84.507,594.456 85.115,595.229 85.579,595.981 C85.802,596.342 85.639,597.009 85.517,597.505 C84.573,601.38 85.034,605.278 85.249,609.178 C85.304,610.168 85.201,611.166 85.163,612.42 C85.972,612.913 85.52,613.952 85.325,614.946 C85.119,615.993 84.95,617.048 84.697,618.083 C84.544,618.713 84.179,619.297 84.062,619.93 C83.935,620.617 84.023,621.34 83.941,622.04 C83.882,622.542 83.702,623.031 83.572,623.525 C83.527,623.698 83.377,623.965 83.436,624.024 C84.477,625.042 83.4,625.527 82.92,626.161 C82.76,626.162 82.6,626.162 82.44,626.162 Z M82.92,610.244 C82.858,610.243 82.796,610.242 82.735,610.24 C82.757,610.478 82.719,610.744 82.815,610.947 C83.026,611.395 83.304,611.811 83.555,612.24 C84.013,611.804 84.51,611.4 84.907,610.915 C85.04,610.752 84.931,610.382 84.912,610.107 C84.806,608.557 84.612,607.008 84.602,605.459 C84.584,602.562 84.322,599.638 85.186,596.799 C85.509,595.738 84.848,595.135 84.131,594.616 C83.918,594.463 83.411,594.47 83.188,594.623 C82.421,595.144 82.16,595.904 82.422,596.822 C82.498,597.089 82.542,597.367 82.577,597.642 C82.78,599.218 83.122,600.793 83.142,602.372 C83.179,604.995 83.006,607.62 82.92,610.244 Z M82.448,619.607 C83.667,619.915 84.111,619.59 84.298,618.436 C84.512,617.113 84.774,615.797 85.006,614.476 C85.06,614.164 85.095,613.845 85.106,613.528 C85.13,612.808 84.725,612.678 84.188,612.979 C83.461,613.387 82.746,613.775 83.102,614.909 C83.477,616.108 83.411,617.342 82.785,618.503 C82.604,618.833 82.557,619.235 82.448,619.607 Z M82.354,623.82 C83.517,623.183 83.821,622.279 83.478,620.685 C82.06,621.145 81.7,622.102 82.354,623.82 Z" id="bone1" stroke="#666666" fill="#000000" fill-rule="nonzero"></path>
@@ -451,62 +451,5 @@ const svgContent = `
     <path d="M240.944609,120.138486 C240.579092,120.154127 240.059271,120.158363 239.729057,120 C240.062619,120.250253 240.455528,120.543844 240.659134,120.932257 C240.721829,121.051844 240.925131,122.095216 241,122.10825 C240.915697,122.092935 240.791524,122.143767 240.707829,122.127801 C240.699308,122.453325 240.873088,122.757995 240.812828,123.09916 C240.76109,123.090362 240.70296,123.077328 240.646352,123.064945 C240.681351,123.072766 240.56357,124.864289 240.54044,125.013203 C240.486266,125.354694 240.402267,125.648284 240.224835,125.939268 C239.952751,126.383728 239.820969,126.328659 240.12227,126.924313 C239.907708,126.941257 239.532451,127.028585 239.340714,126.990461 C239.069238,126.93637 238.909458,126.483438 238.709199,126.995674 C238.346724,126.604654 237.592863,127.251467 237.354561,126.694915 C237.237084,126.86175 237.167694,126.756174 237,126.802445" id="path3044" stroke="#666666" transform="translate(239.000000, 123.500000) scale(-1, 1) translate(-239.000000, -123.500000) "></path>
 </g>
 </svg>
-`;
-
-// File: bonesSvgGenerator.js
-const generateColoredSvg = (bones) => {
-    const colorKeys = {
-        ">75%": "#484848",
-        "<75%": "#A8A8A8",
-        "affected": "#fd5c63",
-        "unknown": "#ffffff"
-    };
-
-    // Parse the SVG string into a DOM object
-    const parser = new DOMParser();
-    const svgDom = parser.parseFromString(svgContent, "image/svg+xml");
-
-    // // Function to set the color of a bone
-    // const setColor = (elementId, color) => {
-    //     const boneElement = svgDom.getElementById(elementId);
-    //     if (boneElement) {
-    //         boneElement.style.fill = color;
-    //     }
-    // };
-
-    // Function to set the color of a bone
-    const setColor = (elementId, color) => {
-        const selected_bones = svgDom.querySelectorAll('[id="' + elementId + '"]');
-        selected_bones.forEach(selected_bone => {
-            if (selected_bone){
-                selected_bone.style.fill = color;
-            }
-        });
-
-    };
-
-    const highlightSingleBones = (bonesJson) => {
-        // Parse the JSON string into a JavaScript object
-        const bones = JSON.parse(bonesJson);
-        for (let key in bones) {
-            for (let element of bones[key]) {
-                setColor('bone' + element, colorKeys[key]);
-            }
-        }
-    };
-    
-
-    if (bones) {
-        highlightSingleBones(bones);
-    }
-
-    // Serialize the SVG DOM back to a string
-    const serializer = new XMLSerializer();
-    const newSvgContent = serializer.serializeToString(svgDom.documentElement);
-
-    return newSvgContent;
-  
-};
-
-export { generateColoredSvg };
-  
+`,d=o=>{const r={">75%":"#484848","<75%":"#A8A8A8",affected:"#fd5c63",unknown:"#ffffff"},t=new DOMParser().parseFromString(i,"image/svg+xml"),n=(F,C)=>{t.querySelectorAll('[id="'+F+'"]').forEach(l=>{l&&(l.style.fill=C)})};return o&&(F=>{const C=JSON.parse(F);for(let e in C)for(let l of C[e])n("bone"+l,r[e])})(o),new XMLSerializer().serializeToString(t.documentElement)};export{d as g};
+//# sourceMappingURL=bonesSvgGenerator-e663f753.js.map

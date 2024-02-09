@@ -164,7 +164,7 @@ const initialize = () => {
       "dating_method": "Dating method",
       "subadults": "Subadults",
       "c_no_o_bones": "Amount of bones",
-      "c_technic": "Used Technic",
+      "c_technic": "Used technique",
       "doi": "Doi",
       "dna_analyses": "aDNA analyses",
       "dna_analyses_link": "DNA analyses",

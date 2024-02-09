@@ -61,3 +61,28 @@ svg path {
     padding-bottom: .5rem;
     margin-right: 1rem;
 }
+
+
+.bone-relations .bone-item {
+    margin-bottom: 0px;
+}
+.bone-relations .item-name {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0px;
+}
+.item-details {
+    padding-left: 30px;
+    margin-bottom: 0px;
+}
+.featureInfoContainer .table ul.item-details  > li {
+    margin-bottom: 0px!important; 
+}
+
+.item-details {
+    padding-left: 1.5rem!important
+}
+
+ul.bone-changes li {
+    padding-bottom: 0px!important;
+}
