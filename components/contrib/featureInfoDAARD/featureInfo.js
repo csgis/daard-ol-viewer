@@ -155,6 +155,7 @@ const initialize = () => {
       "chronology": "Time period",
       "chronology_freetext": "Time period comment",
       "dating_method": "Dating method",
+      "differential_diagnosis": "Differential diagnosis",
       "subadults": "Subadults",
       "c_no_o_bones": "Amount of bones",
       "c_technic": "Used technique",

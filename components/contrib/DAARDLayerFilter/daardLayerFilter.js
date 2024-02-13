@@ -147,7 +147,10 @@ const initialize = () => {
         'reference_images',
         'dating_method',
         'dna_analyses_link',
-        'text'
+        'text',
+        'doi',
+        'archaeological_individualid',
+        'archaeological_tombid'
       ]
       let isNotBlocked = blockedKeys.includes(key)
       return isNotBlocked;
@@ -168,6 +171,7 @@ const initialize = () => {
       "doi": "Doi",
       "dna_analyses": "aDNA analyses",
       "dna_analyses_link": "DNA analyses",
+      "differential_diagnosis": "Differential Diagnosis",
       "storage_place": "Storage place",
       "storage_place_freetext": "Storage place freetext",
       "archaeological_burial_type": "Archaeological burial type",
