@@ -214,8 +214,8 @@ const make_compare_pdf = () => {
 
     img.onload = () => {
       console.log(img.width, img.height);
-      canvas.width = img.width;
-      canvas.height = img.height;
+      canvas.width = 291;
+      canvas.height = 634;
       ctx.drawImage(img, 0, 0);
       const dataURL = canvas.toDataURL('image/png');
       callback(dataURL, img); // Pass the image along with the dataURL
