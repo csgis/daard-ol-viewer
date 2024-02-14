@@ -35,7 +35,7 @@ const createMarkupContainer = () => {
                       <div class="accordion-item">
                           <p class="accordion-header py-0">
                               <button class="accordion-button py-1 btn-light btn-sm" type="button" @click="legend.toggleDetails(item)">
-                                  <span x-text="item.get('name')"></span>
+                                  <span x-text="item.get('name').replace('Daard', 'DAARD')"></span>
                               </button>
                           </p>
                           <div class="accordion-collapse collapse" :class="{'show': item.showDetails}">
