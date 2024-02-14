@@ -35,7 +35,7 @@ const replaceDatingMethod = (value) => {
 
     // Iterate over the replacements object and replace each occurrence of the key in the value
     Object.keys(replacements).forEach(key => {
-        const pattern = new RegExp(key, 'g'); // Create a global regular expression from the key
+        const pattern = new RegExp(key, 'g');
         value = value.replace(pattern, replacements[key]);
     });
 
