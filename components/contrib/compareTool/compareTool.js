@@ -328,8 +328,7 @@ const initialize = (map, view) => {
     },
     decorateValue: function(value) {
       const decoratedValue = decorateValue(value, 
-        ['appendEuroToNumber', 
-        'createLinkForUrl', 
+        ['createLinkForUrl', 
         'decodeUrl', 
         'harmonizeUnknown', 
         'harmonizeTrueFalse', 

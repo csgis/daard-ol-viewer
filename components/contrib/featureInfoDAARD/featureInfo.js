@@ -197,8 +197,7 @@ const initialize = () => {
     },
     decorateValue: function(value) {
       const decoratedValue = decorateValue(value, 
-        ['appendEuroToNumber', 
-        'createLinkForUrl', 
+        ['createLinkForUrl', 
         'decodeUrl', 
         'replaceBullet', 
         'harmonizeUnknown', 
@@ -206,7 +205,8 @@ const initialize = () => {
         'harmonizeMonth',
         'removeListIfOnlyOneLi',
         'toggleLongText',
-        'replaceDatingMethod'
+        'replaceDatingMethod',
+        'unknownLowerCase'
       ]);
       return decoratedValue;
     },

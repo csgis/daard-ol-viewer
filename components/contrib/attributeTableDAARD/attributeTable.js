@@ -329,7 +329,7 @@ const initialize = () => {
     currentPage: 1,
     fetchSuccessful: false,
     decorateValue: function(value) {
-      const decoratedValue = decorateValue(value, ['createLinkForUrl', 'decodeUrl', 'harmonizeUnknown', 'replaceBulletwithComma', 'replaceUndefined']);
+      const decoratedValue = decorateValue(value, ['createLinkForUrl', 'decodeUrl', 'harmonizeUnknown', 'replaceBulletwithComma', 'replaceUndefined', 'replaceDatingMethod', 'unknownLowerCase']);
       return decoratedValue;
     },
     blockedKeys: [

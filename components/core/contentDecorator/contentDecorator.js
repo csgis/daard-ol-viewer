@@ -11,6 +11,7 @@ import replaceBulletwithComma from './decorators/replaceBulletwithComma';
 import replaceDatingMethod from './decorators/replaceDatingMethod';
 import replaceUndefined from './decorators/replaceUndefined';
 import toggleLongText from './decorators/toggleLongText';
+import unknownLowerCase from './decorators/unknownLowerCase';
 
 const decorators = {
     appendEuroToNumber,
@@ -25,7 +26,8 @@ const decorators = {
     replaceBulletwithComma,
     replaceUndefined,
     toggleLongText,
-    replaceDatingMethod
+    replaceDatingMethod,
+    unknownLowerCase
 };
 
 const decorateValue = (value, usedDecorators = []) => {

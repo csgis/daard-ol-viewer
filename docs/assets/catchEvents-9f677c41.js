@@ -1,0 +1,2 @@
+import{m as t}from"./index-a4cc1013.js";const i=()=>{document.addEventListener("filterPushed",function(e){console.debug('Custom event "filterPushed" caught in debug/catchEvents.js'),console.debug(e.detail.instance),console.debug(e.detail.instance.getUrl()),console.debug(e.detail.instance.getParams().LAYERS)}),t.store("pluginStatus").increasePluginLoadingStatus()};export{i as initialize};
+//# sourceMappingURL=catchEvents-9f677c41.js.map
