@@ -205,7 +205,8 @@ const initialize = () => {
         'harmonizeTrueFalse', 
         'harmonizeMonth',
         'removeListIfOnlyOneLi',
-        'toggleLongText'
+        'toggleLongText',
+        'replaceDatingMethod'
       ]);
       return decoratedValue;
     },

@@ -8,6 +8,7 @@ import harmonizeUnknown from './decorators/harmonizeUnknown.js';
 import removeListIfOnlyOneLi from './decorators/removeListIfOnlyOneLi'
 import replaceBullet from './decorators/replaceBullet';
 import replaceBulletwithComma from './decorators/replaceBulletwithComma';
+import replaceDatingMethod from './decorators/replaceDatingMethod';
 import replaceUndefined from './decorators/replaceUndefined';
 import toggleLongText from './decorators/toggleLongText';
 
@@ -23,7 +24,8 @@ const decorators = {
     removeListIfOnlyOneLi,
     replaceBulletwithComma,
     replaceUndefined,
-    toggleLongText
+    toggleLongText,
+    replaceDatingMethod
 };
 
 const decorateValue = (value, usedDecorators = []) => {
