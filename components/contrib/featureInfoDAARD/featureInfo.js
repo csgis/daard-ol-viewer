@@ -212,7 +212,6 @@ const initialize = () => {
     },
     isBlacklistedKey: function(key) {
       let blockedKeys = [
-        'svgid', 
         'c_bones', 
         'bone_relations', 
         'age', 

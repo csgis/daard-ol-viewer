@@ -264,7 +264,7 @@ const initialize = () => {
         data.values.forEach(value => {
             if (value !== "") {
             const option = document.createElement('option');
-            option.value = value;
+            option.value = value.replace("'","''");
             option.textContent = value;
             this.currentValueSelect.appendChild(option);
             this.currentValueSelect.classList.add('updated');
@@ -310,7 +310,7 @@ const initialize = () => {
       const hasNameValue = name && name.trim() !== '' && name.trim() !== '-';
     
       if (hasNameValue && operator && value) {
-        concatenatedValues += `("${name}"${operator}'${value}')${joinStr}`;
+        concatenatedValues += `("${name}"${operator}'${encodeURIComponent(value)}')${joinStr}`;
       }
     });
 
