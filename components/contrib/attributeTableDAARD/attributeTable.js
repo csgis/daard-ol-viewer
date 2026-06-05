@@ -12,8 +12,8 @@ import feather from 'feather-icons';
 import {renderMarkupAndSetPluginReady} from '../../core/helper.js'
 
 const parseFilterCondition = (condition) => {
-  const match = condition.match(/"([^"]+)"='([^']+)'/);
-  return equalTo(match[1], match[2]);
+  const match = condition.match(/"([^"]+)"='(.*)'\)?$/);
+  return equalTo(match[1], match[2].replace(/''/g, "'"));
 };
 
 var fetchFeatureData = (layerName, filterString) => {
